@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild sv_image.js --bundle --platform=node --target=node14 --outfile=dist/index.js",
+    "watch": "esbuild sv_image.js --bundle --platform=node --target=node14 --outfile=dist/index.js --watch"
+  },
+  "keywords": [],
+  "author": "itschip",
+  "license": "ISC",
+  "dependencies": {
+    "form-data": "^4.0.0",
+    "formdata-node": "^5.0.1",
+    "node-fetch": "^3.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.18.13"
+  }
+}
