@@ -2,6 +2,9 @@
 
 This is the official Fivemanage API SDK for FiveM. It is written in Javascript and Lua.
 
+## Requirements
+- Screenshot Basic
+
 ## Installation
 Download the latest release from the [releases](https://github.com/fivemanage/sdk/releases). Make sure it is the `fivemanage_lib.zip
 ` file.
