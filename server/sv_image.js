@@ -4,6 +4,7 @@ import fetch from 'node-fetch'
 const API_URL = "https://api.fivemanage.com/api/image"
 
 exports('takeServerImage', (src, metadata) => {
+  if (!src) throw new Error("Player Id provided is not valid")
   exports['screenshot-basic'].requestClientScreenshot(src, {
     encoding: 'png',
     quality: 0.85,
