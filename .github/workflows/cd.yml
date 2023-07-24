@@ -57,6 +57,8 @@ jobs:
         mkdir -p ./temp/fivemanage_lib
         cp ./fxmanifest.lua ./temp/fivemanage_lib/
         cp -r ./client ./temp/fivemanage_lib/client
+
+        mkdir -p ./temp/fivemanage_lib/server/dist
         cp -r ./server/dist ./temp/fivemanage_lib/server/dist
 
         cd ./temp && zip -r ../fivemanage_lib ./fivemanage_lib
