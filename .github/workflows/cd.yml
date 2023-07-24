@@ -1,0 +1,77 @@
+name: Deployment
+
+on:
+  push:
+    tags: "v*"
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Build and create release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Get tag
+      run: echo ::set-output name=VERSION_TAG::${GITHUB_REF/refs\/tags\//}
+      id: get_tag
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - uses: pnpm/action-setup@v2
+      name: Install pnpm
+      id: pnpm-install
+      with:
+        version: 7
+        run_install: false
+
+    - name: Get pnpm store directory
+      id: pnpm-cache
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+    - uses: actions/cache@v3
+      name: Setup pnpm cache
+      with:
+        path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install server dependencies
+      run: cd server && pnpm install
+
+    - name: Bundle built files
+      run: |
+        mkdir -p ./temp/fivemanage_lib
+        cp ./fxmanifest.lua} ./temp/fivemanage_lib/
+        cp -r ./client ./temp/fivemanage_lib/client
+        cp -r ./server/dist ./temp/fivemanage_lib/server/dist
+
+        cd ./temp && zip -r ../fivemanage_lib ./fivemanage_lib
+
+
+    - name: Create Release
+      uses: "marvinpinto/action-automatic-releases@v1.2.1"
+      id: auto_release
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        title: Fivemanage API SDK | ${{ steps.get_tag.outputs.VERSION_TAG }}
+        prerelease: false
+        files: fivemanage_lib.zip
+
+      env:
+        CI: false
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
