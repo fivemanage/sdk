@@ -67,7 +67,6 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        token: "${{ secrets.GITHUB_TOKEN }}"
         name: Fivemanage API SDK | ${{ steps.get_tag.outputs.VERSION_TAG }}
         prerelease: false
         files: fivemanage_lib.zip
