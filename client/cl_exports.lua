@@ -1,4 +1,10 @@
+exports('takeServerImage', function(metadata)
+  TriggerServerEvent('fivemanage:server:takeImage', metadata)
+end)
+
 RegisterCommand('takeImage', function()
-  print("HELLO")
-  TriggerServerEvent('fivemanage:server:takeImage', { color = "red", player = "player1" })
+  exports.fivemanage_lib:takeServerImage({
+    playerId = "1",
+    type = "player",
+  })
 end, false)

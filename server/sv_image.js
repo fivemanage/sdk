@@ -15,9 +15,6 @@ exports('takeServerImage', (src, metadata) => {
 onNet('fivemanage:server:takeImage', (metadata) => {
   const src = global.source;
 
-  console.log("Metadata:", metadata)
-
-  console.log(src)
   exports['screenshot-basic'].requestClientScreenshot(src, {
     encoding: 'png',
     quality: 0.85,
@@ -27,6 +24,14 @@ onNet('fivemanage:server:takeImage', (metadata) => {
 })
 
 function uploadImage(data, metadata) {
+  const apiToken = GetConvar("FIVEMANAGE_IMAGE_TOKEN", '')
+
+  if (!apiToken) {
+    console.error("FIVEMANAGE_IMAGE_TOKEN is not set")
+    return
+  }
+
+
   const buf = Buffer.from(data.split(',')[1], 'base64')
 
   const form = new FormData()
@@ -40,13 +45,10 @@ function uploadImage(data, metadata) {
     method: 'POST',
     body: form,
     headers: {
-      'Authorization': ''
+      'Authorization': apiToken
     }
   })
-  .then(res => res.json())
-  .then(json => {
-    console.log(json)
-  }).catch(err => {
+  .catch(err => {
     console.log(err)
   })
 }
