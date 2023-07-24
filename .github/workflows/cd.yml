@@ -49,10 +49,13 @@ jobs:
     - name: Install server dependencies
       run: cd server && pnpm install --no-frozen-lockfile
 
+    - name: Build server
+      run: cd server && pnpm build
+
     - name: Bundle built files
       run: |
         mkdir -p ./temp/fivemanage_lib
-        cp ./fxmanifest.lua} ./temp/fivemanage_lib/
+        cp ./fxmanifest.lua ./temp/fivemanage_lib/
         cp -r ./client ./temp/fivemanage_lib/client
         cp -r ./server/dist ./temp/fivemanage_lib/server/dist
 
