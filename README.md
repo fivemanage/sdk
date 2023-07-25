@@ -20,28 +20,32 @@ You can now call events or exports.
 
 ### Client Exports
 ```lua
-exports.fivemanage_lib:takeImage()
+local imageData = exports.fivemanage_lib:takeImage()
 
 -- With metadata
 
-exports.fivemanage_lib:takeImage({
+local imageData =  exports.fivemanage_lib:takeImage({
     name = "My image",
     description = "This is my image",
     -- or any other field you want
 })
+
+print(image.url)
 ```
 
 ### Server Exports
 ```lua
-exports.fivemanage_lib:takeServerImage(src)
+local imageData = exports.fivemanage_lib:takeServerImage(src)
 
 -- With metadata
 
-exports.fivemanage_lib:takeServerImage(src, {
+local imageData = exports.fivemanage_lib:takeServerImage(src, {
     name = "My image",
     description = "This is my image",
     -- or any other field you want
 })
+
+print(image.url)
 ```
 
 
