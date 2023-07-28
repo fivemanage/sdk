@@ -8,7 +8,8 @@ author "Fivemanage"
 description "FiveManage API SDK for FiveM"
 
 shared_scripts {
-  "shared/init.lua"
+  "shared/init.lua",
+  "shared/*.lua"
 }
 
 client_scripts {
@@ -16,5 +17,6 @@ client_scripts {
 }
 
 server_scripts {
-  "server/dist/index.js"
+  "server/image/dist/index.js",
+  "server/analytics/main.lua"
 }
