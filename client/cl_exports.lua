@@ -4,7 +4,7 @@ exports("takeImage", function(metadata)
 	local p = promise.new()
 	TriggerServerEvent("fivemanage:server:takeImage", metadata, ImageRequestId)
 
-	local eventHandler = RegisterNetEvent('fivemanage:client:receiveImageCallback:'..ImageRequestId, function(res)
+	local eventHandler = RegisterNetEvent('fivemanage:client:receiveImageCallback:' .. ImageRequestId, function(res)
 		p:resolve(res)
 	end)
 
