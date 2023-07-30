@@ -30,7 +30,7 @@ local imageData =  exports.fivemanage_lib:takeImage({
     -- or any other field you want
 })
 
-print(image.url)
+print(imageData.url)
 ```
 
 ### Server Exports
@@ -45,7 +45,7 @@ local imageData = exports.fivemanage_lib:takeServerImage(src, {
     -- or any other field you want
 })
 
-print(image.url)
+print(imageData.url)
 ```
 
 
