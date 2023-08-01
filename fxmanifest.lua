@@ -1,14 +1,23 @@
 fx_version "cerulean"
 
+lua54 "yes"
+
 game "gta5"
 
-author "Fivemanage"
-description "FiveManage API SDK for FiveM"
+shared_scripts {
+    "shared/init.lua",
+    "shared/utils.lua",
+}
 
 client_scripts {
-  "client/cl_exports.lua",
+    "client/image.lua",
 }
 
 server_scripts {
-  "server/dist/index.js"
+    "server/heartbeat.lua",
+    "server/analytics/start.lua",
+    "server/analytics/player.lua",
+    "server/main.lua",
+
+    "server/image/dist/index.js",
 }
