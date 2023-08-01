@@ -6,7 +6,7 @@ const API_URL = "https://api.fivemanage.com/api/image";
 exports("takeServerImage", async (src, metadata) => {
   if (!src) throw new Error("Player Id provided is not valid");
 
-  return await new Promise((resolve, reject) => {
+  return await new Promise((resolve) => {
     exports["screenshot-basic"].requestClientScreenshot(
       src,
       {
@@ -22,8 +22,8 @@ exports("takeServerImage", async (src, metadata) => {
   });
 });
 
-onNet("fivemanage:server:takeImage", (metadata, requestId) => {
-  const src = global.source;
+onNet("fivemanage:takeImage", (metadata, requestId) => {
+  const src = globalThis.source;
 
   exports["screenshot-basic"].requestClientScreenshot(
     src,
@@ -33,17 +33,9 @@ onNet("fivemanage:server:takeImage", (metadata, requestId) => {
     },
     (_, data) => {
       uploadImage(data, metadata).then((result) => {
-        emitNet(
-          "fivemanage:client:receiveImageCallback:" + requestId,
-          src,
-          result
-        );
+        emitNet("fivemanage:receiveImageCallback:" + requestId, src, result);
         setTimeout(() => {
-          emitNet(
-            "fivemanage:client:receiveImageCallback:" + requestId,
-            src,
-            result
-          );
+          emitNet("fivemanage:receiveImageCallback:" + requestId, src, result);
         }, 1000);
       });
     }
@@ -51,10 +43,10 @@ onNet("fivemanage:server:takeImage", (metadata, requestId) => {
 });
 
 function uploadImage(data, metadata) {
-  const apiToken = GetConvar("FIVEMANAGE_IMAGE_TOKEN", "");
+  const apiKey = GetConvar("FIVEMANAGE_API_KEY", "");
 
-  if (!apiToken) {
-    console.error("FIVEMANAGE_IMAGE_TOKEN is not set");
+  if (!apiKey) {
+    console.error("FIVEMANAGE_API_KEY is not set");
     return;
   }
 
@@ -72,7 +64,7 @@ function uploadImage(data, metadata) {
       method: "POST",
       body: form,
       headers: {
-        Authorization: apiToken,
+        Authorization: apiKey,
       },
     })
       .then((res) => res.json())

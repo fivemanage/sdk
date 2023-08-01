@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "form-data": "^4.0.0",
-    "formdata-node": "^5.0.1",
     "node-fetch": "^3.3.1"
   },
   "devDependencies": {

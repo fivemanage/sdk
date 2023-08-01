@@ -1,6 +1,7 @@
 # Fivemanage API SDK for FiveM
 
-This is the official Fivemanage API SDK for FiveM. It is written in Javascript and Lua.
+This is the official Fivemanage API SDK for FiveM. It is written in Javascript
+and Lua.
 
 ## Requirements
 
@@ -8,18 +9,19 @@ This is the official Fivemanage API SDK for FiveM. It is written in Javascript a
 
 ## Installation
 
-Download the latest release from the [releases](https://github.com/fivemanage/sdk/releases). Make sure it is the `fivemanage_lib.zip
-` file.
+Download the latest release from the
+[releases](https://github.com/fivemanage/sdk/releases). Make sure it is the
+`fivemanage_lib.zip ` file.
 
 ## Usage
 
 Add the following to your `server.cfg`:
 
 ```
-set FIVEMANAGE_IMAGE_TOKEN your_token
+set FIVEMANAGE_API_KEY your_api_key
 ```
 
-This is the token for image uploading
+This is the key for authenticating with our backend.
 
 You can now call events or exports.
 
