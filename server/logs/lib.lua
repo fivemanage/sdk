@@ -82,3 +82,5 @@ end
 -- TODO: Add fatal level log
 
 Logs:start()
+
+print("LOGS ARE CURRENTLY IN BETA. IF YOU'D LIKE TO TEST, PLEASE JOIN OUR DISCORD SERVER")
