@@ -1,19 +1,19 @@
-fx_version("cerulean")
+fx_version "cerulean"
 
-lua54("yes")
+lua54 "yes"
 
-game("gta5")
+game "gta5"
 
-shared_scripts({
+shared_scripts {
 	"shared/init.lua",
 	"shared/utils.lua",
-})
+}
 
-client_scripts({
+client_scripts {
 	"client/image.lua",
-})
+}
 
-server_scripts({
+server_scripts {
 	"server/heartbeat.lua",
 	"server/analytics/start.lua",
 	"server/analytics/player.lua",
@@ -21,4 +21,4 @@ server_scripts({
 	"server/main.lua",
 
 	"server/dist/index.js",
-})
+}
