@@ -35,8 +35,8 @@ function Logs:LogMessage(info, message, metadata)
 	sendHttpRequest(log_data)
 end
 
-function GetLoggerInstance() {
+function GetLoggerInstance()
     return Logs
-}
+end
 
 print("LOGS ARE CURRENTLY IN BETA. IF YOU'D LIKE TO TEST, PLEASE JOIN OUR DISCORD SERVER")
