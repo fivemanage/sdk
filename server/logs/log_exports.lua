@@ -2,6 +2,6 @@ exports("LogMessage", function(level, message, metadata)
 	Logs:LogMessage(level, message, metadata)
 end)
 
-exports("GetLoggerInstance", fucntion()
+exports("GetLoggerInstance", function()
 	return GetLoggerInstance()
 end)
