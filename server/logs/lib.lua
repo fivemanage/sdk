@@ -1,5 +1,5 @@
 Logs = {}
-local apiUrl= "https://api.fivemanage.com/logs"
+local apiUrl = "https://api.fivemanage.com/logs"
 local apiKey = GetConvar("FIVEMANAGE_API_KEY", "")
 
 
@@ -24,16 +24,19 @@ end
 
 function Logs:LogMessage(info, message, metadata)
 	--self.findContext()
-	print("LogMessage: " .. info .. " " .. message)
-
     local log_data = {
         info = info,
         message = message,
-        -- TODO: We might not actually have to do this at all. One seralization might be enough
         metadata = json.encode(metadata)
     }
 
+    -- might have to look into some batching later, in order to reduce the amount of requests sent to the backend
+    -- for testing though, this should be fine
 	sendHttpRequest(log_data)
 end
+
+function GetLoggerInstance() {
+    return Logs
+}
 
 print("LOGS ARE CURRENTLY IN BETA. IF YOU'D LIKE TO TEST, PLEASE JOIN OUR DISCORD SERVER")
