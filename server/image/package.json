@@ -4,8 +4,8 @@
   "license": "GPL-3.0-or-later",
   "private": true,
   "scripts": {
-    "build": "esbuild sv_image.js --bundle --platform=node --target=node14 --outfile=dist/index.js",
-    "watch": "esbuild sv_image.js --bundle --platform=node --target=node14 --outfile=dist/index.js --watch"
+    "build": "esbuild sv_image.js --bundle --platform=node --target=node14 --outfile=../dist/index.js",
+    "watch": "esbuild sv_image.js --bundle --platform=node --target=node14 --outfile=../dist/index.js --watch"
   },
   "dependencies": {
     "form-data": "^4.0.0",
