@@ -1,5 +1,5 @@
 Logs = {}
-local apiUrl = "https://api.fivemanage.com/logs"
+local apiUrl = "https://api.fivemanage.com/api/logs"
 local apiKey = GetConvar("FIVEMANAGE_API_KEY", "")
 
 -- TODO: Add context to logs
