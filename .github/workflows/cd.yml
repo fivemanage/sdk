@@ -58,8 +58,11 @@ jobs:
           cp ./fxmanifest.lua ./temp/fivemanage_lib/
           cp -r ./client ./temp/fivemanage_lib/client
 
-          #mkdir -p ./temp/fivemanage_lib/server
-          cp -r ./server ./temp/fivemanage_lib/server
+          mkdir -p ./temp/fivemanage_lib/server
+          cp ./server/{main.lua,heartbeat.lua} ./temp/fivemanage_lib/server
+          cp -r ./server/dist ./temp/fivemanage_lib/server
+          cp -r ./server/logs ./temp/fivemanage_lib/server
+
           #cp -r ./server/dist ./temp/fivemanage_lib/server
           #rm ./temp/fivemanage_lib/server/image
 
