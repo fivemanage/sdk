@@ -25,6 +25,8 @@ This is the key for authenticating with our backend.
 
 You can now call events or exports.
 
+## Images
+
 ### Client Exports
 
 ```lua
@@ -55,4 +57,32 @@ local imageData = exports.fivemanage_lib:takeServerImage(src, {
 })
 
 print(imageData.url)
+```
+
+## Logs
+
+#### Levels
+
+## Note
+
+Only users with beta access can use logs right now. We'll update our discord and this readme when it is available for everyone! Hang in there!
+
+- info
+- warn
+- error
+
+### Client
+
+Coming soon
+
+### Server
+
+```lua
+exports.fivemanage_lib:LogMessage("error", "Failed to roleplay")
+
+-- With metadata
+exports.fivemanage_lib:LogMessage("error", "Failed to roleplay", {
+    playerName = "Dude",
+    playerIdentifier = someFunctionThatReturnsTheID(someArg)
+})
 ```
