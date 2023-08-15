@@ -59,7 +59,9 @@ jobs:
           cp -r ./client ./temp/fivemanage_lib/client
 
           mkdir -p ./temp/fivemanage_lib/server
+          cp -r ./server ./temp/fivemanage_lib/server
           cp -r ./server/dist ./temp/fivemanage_lib/server
+          rm ./temp/fivemanage_lib/server/image
 
           cd ./temp && zip -r ../fivemanage_lib ./fivemanage_lib
 
