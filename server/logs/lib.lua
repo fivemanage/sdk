@@ -10,11 +10,19 @@ function Logs.findContext()
     return info
 end
 
+local function isValidLogLevel(level)
+    if level == "info" or "warn" or "error" then
+        return true
+    end
+
+    return false
+end
+
 local function sendHttpRequest(data)
 	PerformHttpRequest(
         apiUrl,
         function() end,
-        "POST", 
+        "POST",
         data = json.encode(data),
         {
             Authorization = apiKey
@@ -22,10 +30,16 @@ local function sendHttpRequest(data)
     )
 end
 
-function Logs:LogMessage(info, message, metadata)
+function Logs:LogMessage(level, message, metadata)
+    local isValid = isValidLogLevel(level)
+    if !isValid then
+        print("Log level is not valid. Use 'info', 'warn' or 'error'.")
+        return
+    end
+
 	--self.findContext()
     local log_data = {
-        info = info,
+        level = level,
         message = message,
         metadata = json.encode(metadata)
     }
@@ -40,3 +54,4 @@ function GetLoggerInstance()
 end
 
 print("LOGS ARE CURRENTLY IN BETA. IF YOU'D LIKE TO TEST, PLEASE JOIN OUR DISCORD SERVER")
+
