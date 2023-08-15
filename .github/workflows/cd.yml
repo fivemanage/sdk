@@ -63,6 +63,8 @@ jobs:
           cp -r ./server/dist ./temp/fivemanage_lib/server
           cp -r ./server/logs ./temp/fivemanage_lib/server
 
+          cp -r ./shared ./temp/fivemanage_lib/shared
+
           #cp -r ./server/dist ./temp/fivemanage_lib/server
           #rm ./temp/fivemanage_lib/server/image
 
