@@ -19,7 +19,8 @@ end
 
 local function sendHttpRequest(data)
 	PerformHttpRequest(apiUrl, function() end, "POST", json.encode(data), {
-		Authorization = apiKey,
+		["Authorization"] = apiKey,
+		["Content-Type"] = "application/json",
 	})
 end
 
@@ -34,7 +35,7 @@ function Logs:LogMessage(level, message, metadata)
 	local log_data = {
 		level = level,
 		message = message,
-		metadata = json.encode(metadata),
+		metadata = metadata or nil,
 	}
 
 	-- might have to look into some batching later, in order to reduce the amount of requests sent to the backend
