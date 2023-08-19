@@ -44,19 +44,26 @@ function Logs:LogMessage(logType, message, options)
 		return
 	end
 
+	local player
 	if options?.playerSource then
 		if not type(options.playerSource) == type("number") then
 			print("Player source must be a number.")
 			return
 		end
 
-		local identifiers = getIdentifiers(options.playerSource)
+		player = {
+			identifiers = getIdentifiers(options.playerSource),
+			source = options.playerSource
+		}
+
+		options.playerSource = nil
 	end
 
 	local log_data = {
 		type = logType,
 		message = message,
-		options = options
+		options = options,
+		player = player,
 	}
 
 	-- might have to look into some batching later, in order to reduce the amount of requests sent to the backend
