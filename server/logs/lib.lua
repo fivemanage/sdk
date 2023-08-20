@@ -9,14 +9,6 @@ function Logs.findContext()
 	return info
 end
 
-local function isValidLogLevel(level)
-	if level == "info" or "warn" or "error" then
-		return true
-	end
-
-	return false
-end
-
 local function sendHttpRequest(data)
 	PerformHttpRequest(apiUrl, function() end, "POST", json.encode(data), {
 		["Authorization"] = apiKey,
@@ -24,18 +16,54 @@ local function sendHttpRequest(data)
 	})
 end
 
-function Logs:LogMessage(level, message, metadata)
-	local isValid = isValidLogLevel(level)
-	if not isValid then
-		print("Log level is not valid. Use 'info', 'warn' or 'error'.")
+local function getIdentifiers(playerSource)
+	local identifiers = GetPlayerIdentifiers(playerSource)
+	local data = {}
+	for i = 1, #identifiers do
+		--split the identifier at the colon
+		local identifier = identifiers[i]
+		local _, _, idType, id = string.find(identifier, "([^:]+):(.+)")
+		data[idType] = id
+	end
+
+	return data
+end
+
+---@alias logType string | '"info"' | '"warn"' | '"error"' | 'any' | string
+
+---@class LogOptions
+---@field metadata table @The metadata to send with the log. Can be an array or kv.
+---@field playerSource number @The player source to send with the log.
+
+---@param logType logType @The log level.
+---@param message string @The log message.
+---@param options LogOptions @The log options.
+function Logs:LogMessage(logType, message, options)
+	if not logType == type("string") or not message == type("string") then
+		print("Log type or message is missing.")
 		return
 	end
 
-	--self.findContext()
+	local player
+	if options?.playerSource then
+		if not type(options.playerSource) == type("number") then
+			print("Player source must be a number.")
+			return
+		end
+
+		player = {
+			identifiers = getIdentifiers(options.playerSource),
+			source = options.playerSource
+		}
+
+		options.playerSource = nil
+	end
+
 	local log_data = {
-		level = level,
+		type = logType,
 		message = message,
-		metadata = metadata or nil,
+		options = options,
+		player = player,
 	}
 
 	-- might have to look into some batching later, in order to reduce the amount of requests sent to the backend
