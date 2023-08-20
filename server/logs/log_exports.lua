@@ -1,10 +1,7 @@
----@param logType logType @The log level.
----@param message string @The log message.
----@param options LogOptions @The log options.
-exports("LogMessage", function(logType, message, options)
-	Logs:LogMessage(logType, message, options)
+exports("LogMessage", function(log_level, message, metadata)
+	Process_Log_Request(log_level, message, metadata)
 end)
 
 exports("GetLoggerInstance", function()
-	return GetLoggerInstance()
+	return Get_Logger_Instance()
 end)
