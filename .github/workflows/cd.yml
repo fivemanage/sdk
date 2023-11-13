@@ -1,5 +1,12 @@
 name: Deployment
 
+permissions:
+  contents: read
+  packages: write
+  deployments: write
+  pull-requests: write
+  id-token: write
+
 on:
   push:
     tags: "v*"
@@ -80,4 +87,4 @@ jobs:
 
         env:
           CI: false
-          GITHUB_TOKEN: ${{ secrets.FIVEMANAGE_WORKFLOW }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
