@@ -43,10 +43,10 @@ onNet("fivemanage:takeImage", (metadata, requestId) => {
 });
 
 function uploadImage(data, metadata) {
-  const apiKey = GetConvar("FIVEMANAGE_API_KEY", "");
+  const apiKey = GetConvar("FIVEMANAGE_MEDIA_API_KEY", "");
 
   if (!apiKey) {
-    console.error("FIVEMANAGE_API_KEY is not set");
+    console.error("FIVEMANAGE_MEDIA_API_KEY is not set");
     return;
   }
 

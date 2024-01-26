@@ -1,6 +1,6 @@
 Logger = {}
 
-local api_url = "https://api.fivemanage.com/api/logs"
+local api_url = "https://cat-polished-marlin.ngrok-free.app/api/logs" --"https://api.fivemanage.com/api/logs"
 
 local function print_to_console(message, log_level, metadata, resource)
 	local _log_level_color = log_level == "info" and "^2" or log_level == "warn" and "^3" or "^1"
@@ -17,7 +17,7 @@ local function send_http_request(data)
 			return
 		end
 	 end, "POST", json.encode(data), {
-		["Authorization"] = API_KEY,
+		["Authorization"] = LOGS_API_KEY,
 		["Content-Type"] = "application/json",
 	})
 end
@@ -61,7 +61,7 @@ function Process_Log_Request(log_level, message, metadata, resource)
 	-- might have to look into some batching later, in order to reduce the amount of requests sent to the backend
 	-- for testing though, this should be fine
 
-	if not API_KEY then
+	if not LOGS_API_KEY then
 		print("API key is not set, skipping log...")
 		return
  	end
@@ -69,6 +69,7 @@ function Process_Log_Request(log_level, message, metadata, resource)
 	send_http_request({
 		level = _log_level,
 		message = message,
+		resource = resource,
 		metadata = _metadata,
 	})
 end
