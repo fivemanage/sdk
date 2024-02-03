@@ -1,25 +1,46 @@
 Logger = {}
 
-local api_url = "https://cat-polished-marlin.ngrok-free.app/api/logs" --"https://api.fivemanage.com/api/logs"
+local api_url = "https://api.fivemanage.com/api/logs"
 
 local function print_to_console(message, log_level, metadata, resource)
 	local _log_level_color = log_level == "info" and "^2" or log_level == "warn" and "^3" or "^1"
 
-	print(string.format("%s[%s] %s^7: %s. [Metadata]: %s", _log_level_color, log_level:upper(), resource, message, json.encode(metadata)))
+	print(
+		string.format(
+			"%s[%s] %s^7: %s. [Metadata]: %s",
+			_log_level_color,
+			log_level:upper(),
+			resource,
+			message,
+			json.encode(metadata)
+		)
+	)
 end
 
 ---Sends an HTTP request to our backend. This is an internal function.
 ---@param data table The data to be sent as part of the HTTP request.
 local function send_http_request(data)
-	PerformHttpRequest(api_url, function(errorCode, resultData, resultHeaders, errorData)
-		if errorCode ~= 200 then
-			print(string.format("^1Failed to send log to fivemanage. Error code: %s. Error data: %s", errorCode, errorData))
-			return
-		end
-	 end, "POST", json.encode(data), {
-		["Authorization"] = LOGS_API_KEY,
-		["Content-Type"] = "application/json",
-	})
+	PerformHttpRequest(
+		api_url,
+		function(errorCode, resultData, resultHeaders, errorData)
+			if errorCode ~= 200 then
+				print(
+					string.format(
+						"^1Failed to send log to fivemanage. Error code: %s. Error data: %s",
+						errorCode,
+						errorData
+					)
+				)
+				return
+			end
+		end,
+		"POST",
+		json.encode(data),
+		{
+			["Authorization"] = LOGS_API_KEY,
+			["Content-Type"] = "application/json",
+		}
+	)
 end
 
 ---@alias log_level "info" | "warn" | "error"
@@ -28,12 +49,10 @@ end
 ---@param message string The main content of the log message.
 ---@param metadata table Additional context or data associated with the log event.
 function Process_Log_Request(log_level, message, metadata, resource)
-
 	if type(log_level) ~= "string" or type(message) ~= "string" or (metadata ~= nil and type(metadata) ~= "table") then
 		print("Malformed log data, skipping log...")
 		return
 	end
-
 
 	local _log_level = string.lower(log_level)
 	print_to_console(message, _log_level, metadata, resource)
@@ -43,7 +62,7 @@ function Process_Log_Request(log_level, message, metadata, resource)
 		return
 	end
 
-  -- print out the log to the console in a beautiful and nice way for the user to see it when they are looking at their server consol
+	-- print out the log to the console in a beautiful and nice way for the user to see it when they are looking at their server consol
 
 	if metadata and metadata.playerSource then
 		if type(metadata.playerSource) == "string" then
@@ -64,7 +83,7 @@ function Process_Log_Request(log_level, message, metadata, resource)
 	if not LOGS_API_KEY then
 		print("API key is not set, skipping log...")
 		return
- 	end
+	end
 
 	send_http_request({
 		level = _log_level,
