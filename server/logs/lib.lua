@@ -43,7 +43,7 @@ local function send_http_request(data)
 	)
 end
 
----@alias log_level "info" | "warn" | "error"
+---@alias log_level string
 
 ---@param log_level log_level The severity level of the log (e.g., "info", "warn", "error").
 ---@param message string The main content of the log message.
@@ -57,13 +57,7 @@ function Process_Log_Request(log_level, message, metadata, resource)
 	local _log_level = string.lower(log_level)
 	print_to_console(message, _log_level, metadata, resource)
 
-	if _log_level ~= "info" and _log_level ~= "warn" and _log_level ~= "error" then
-		print("Invalid log level, skipping log...")
-		return
-	end
-
 	-- print out the log to the console in a beautiful and nice way for the user to see it when they are looking at their server consol
-
 	if metadata and metadata.playerSource then
 		if type(metadata.playerSource) == "string" then
 			metadata._identifiers = Utils.getPlayerIdentifiers(metadata.playerSource)
