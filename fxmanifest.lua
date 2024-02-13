@@ -15,10 +15,7 @@ client_scripts {
 
 server_scripts {
 	"server/heartbeat.lua",
-	"server/analytics/start.lua",
-	"server/analytics/player.lua",
 	"server/logs/*.lua",
 	"server/main.lua",
-
 	"server/dist/index.js",
 }
