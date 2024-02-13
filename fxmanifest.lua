@@ -22,3 +22,5 @@ server_scripts {
 
 	"server/dist/index.js",
 }
+
+dependency 'screenshot-basic'
