@@ -14,8 +14,8 @@ import {
 } from "valibot";
 import type { ImageUploadResponse } from "~/images/common/misc";
 import { getErrorMessage } from "~/utils/common/misc";
+import { convars } from "~/utils/server/convars";
 import { registerRPCListener } from "~/utils/server/rpc";
-import { convars } from "~/utils/server/secrets";
 
 const apiUrl = "https://api.fivemanage.com/api/image";
 
