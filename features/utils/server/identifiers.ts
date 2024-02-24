@@ -19,15 +19,21 @@ const identifierCache = new LRUCache<string, FormattedPlayerIdentifiers>({
 });
 
 export function getFormattedPlayerIdentifiers(
-	playerSrc: string,
+	playerSrc: string | number,
 ): FormattedPlayerIdentifiers {
-	if (identifierCache.has(playerSrc)) {
-		return identifierCache.get(playerSrc) as FormattedPlayerIdentifiers;
+	let source = playerSrc;
+
+	if (typeof source === "number") {
+		source = source.toString();
+	}
+
+	if (identifierCache.has(source)) {
+		return identifierCache.get(source) as FormattedPlayerIdentifiers;
 	}
 
 	const identifiers: FormattedPlayerIdentifiers = {};
 
-	for (const identifier of getPlayerIdentifiers(playerSrc)) {
+	for (const identifier of getPlayerIdentifiers(source)) {
 		const splitId = identifier.split(":");
 
 		if (splitId[0] && splitId[1]) {
@@ -35,14 +41,17 @@ export function getFormattedPlayerIdentifiers(
 		}
 	}
 
-	identifierCache.set(playerSrc, identifiers);
+	identifierCache.set(source, identifiers);
 
 	return identifiers;
 }
 
 export function getPlayerIdentifierByType(
-	playerSrc: string,
+	playerSrc: string | number,
 	identifierType: IdentifierType,
 ): string {
-	return GetPlayerIdentifierByType(playerSrc, identifierType);
+	return GetPlayerIdentifierByType(
+		typeof playerSrc === "string" ? playerSrc : playerSrc.toString(),
+		identifierType,
+	);
 }
