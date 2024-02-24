@@ -16,6 +16,7 @@ export const LogColor: Record<LogLevels, string> = {
 
 export type LogMetadata = {
 	playerSource?: string | number;
+	targetSource?: string | number;
 	[key: string]: unknown;
 };
 

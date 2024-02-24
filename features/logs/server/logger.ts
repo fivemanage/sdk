@@ -55,12 +55,18 @@ function log(level: LogLevels, message: string, metadata: LogMetadata = {}) {
 			_serverSessionId: globalThis.serverSessionId,
 		};
 
-		if (config.logs.appendPlayerIdentifiers && meta.playerSource) {
-			meta._identifiers = getFormattedPlayerIdentifiers(
-				typeof meta.playerSource === "string"
-					? meta.playerSource
-					: meta.playerSource.toString(),
-			);
+		if (config.logs.appendPlayerIdentifiers) {
+			if (meta.playerSource) {
+				meta._playerIdentifiers = getFormattedPlayerIdentifiers(
+					meta.playerSource,
+				);
+			}
+
+			if (meta.targetSource) {
+				meta._targetIdentifiers = getFormattedPlayerIdentifiers(
+					meta.targetSource,
+				);
+			}
 		}
 
 		logger.log(level, message, { resource: meta._resourceName, metadata });
