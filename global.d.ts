@@ -1,4 +1,6 @@
 declare global {
+	type Enum<T extends object> = T[keyof T];
+
 	type RPCResponse<T = undefined> =
 		| (T extends undefined ? { success: true } : { success: true; data: T })
 		| { success: false; errorMsg: string };
