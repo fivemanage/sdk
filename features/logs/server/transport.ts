@@ -1,3 +1,4 @@
+import fetch from "node-fetch";
 import Transport from "winston-transport";
 import type { Log } from "~/logs/common/misc";
 import { getErrorMessage, setImmediateInterval } from "~/utils/common/misc";
