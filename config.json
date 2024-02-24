@@ -1,0 +1,9 @@
+{
+	"$schema": "./config.schema.json",
+	"logs": {
+		"level": "info",
+		"console": false,
+		"enableCloudLogging": true,
+		"appendPlayerIdentifiers": true
+	}
+}

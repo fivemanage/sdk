@@ -1,0 +1,48 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "fivemanage-sdk-config-schema",
+	"title": "Fivemanage SDK Config Schema",
+	"description": "All configuration options for the fivemanage sdk.",
+	"type": "object",
+	"properties": {
+		"$schema": {
+			"description": "Schema validation link/path",
+			"type": "string",
+			"default": "./config.schema.json"
+		},
+		"logs": {
+			"description": "Logs configuration",
+			"type": "object",
+			"properties": {
+				"level": {
+					"description": "Default logger level",
+					"type": "string",
+					"enum": ["debug", "info", "warn", "error"],
+					"default": "info"
+				},
+				"console": {
+					"description": "Toggle console logging",
+					"type": "boolean",
+					"default": false
+				},
+				"enableCloudLogging": {
+					"description": "Should logs be sent to the Fivemanage backend?",
+					"type": "boolean",
+					"default": true
+				},
+				"appendPlayerIdentifiers": {
+					"description": "Should player identifiers be appended to log metadata? See documentation for more info",
+					"type": "boolean",
+					"default": true
+				}
+			},
+			"required": [
+				"level",
+				"console",
+				"enableCloudLogging",
+				"appendPlayerIdentifiers"
+			]
+		}
+	},
+	"required": ["$schema", "logs"]
+}
