@@ -79,7 +79,7 @@ function debounce(func, delay) {
 
 const restartResource = debounce(async () => {
 	log("INFO", "Attempting to restart resource", "node");
-	rcon.send("ensure framework-429");
+	rcon.send("ensure sdk");
 }, 500);
 
 /**
