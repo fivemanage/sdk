@@ -34,7 +34,7 @@ if (config.logs.console === true) {
 			format.timestamp(),
 			format.printf(
 				(info) =>
-					`[^3${info.timestamp}^7] [^5${info._resourceName}^7] [${
+					`[^3${info.timestamp}^7] [^5${info.resource}^7] [${
 						LogColor[info.level as keyof typeof LogColor] ?? "^7"
 					}${info.level.toUpperCase()}^7]: ${info.message}`,
 			),
