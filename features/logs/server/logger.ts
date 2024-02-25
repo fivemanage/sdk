@@ -78,7 +78,10 @@ function log(level: string, message: string, metadata: LogMetadata = {}) {
 			}
 		}
 
-		logger.log(level, message, { resource: meta._resourceName, metadata });
+		logger.log(level, message, {
+			resource: meta._resourceName,
+			metadata: meta,
+		});
 	} catch (error) {
 		if (error instanceof ValiError) {
 			console.error(
