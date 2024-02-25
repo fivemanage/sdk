@@ -2,16 +2,18 @@ import {
 	type Output,
 	ValiError,
 	boolean,
-	enum_,
+	string,
+	array,
+	minLength,
 	flatten,
 	object,
 	parse,
 } from "valibot";
-import { LogLevel } from "~/logs/common/misc";
 
 const ConfigSchema = object({
 	logs: object({
-		level: enum_(LogLevel),
+		level: string([minLength(1)]),
+		levels: array(string([minLength(1)])),
 		console: boolean(),
 		enableCloudLogging: boolean(),
 		appendPlayerIdentifiers: boolean(),
@@ -20,11 +22,20 @@ const ConfigSchema = object({
 
 function loadConfig(): Output<typeof ConfigSchema> {
 	try {
-		const config = JSON.parse(
-			LoadResourceFile(GetCurrentResourceName(), "config.json"),
+		const config = parse(
+			ConfigSchema,
+			JSON.parse(LoadResourceFile(GetCurrentResourceName(), "config.json")),
 		);
 
-		return parse(ConfigSchema, config);
+		if (config.logs.levels.includes(config.logs.level) === false) {
+			console.error(
+				"Invalid config settings, logs.level must be in logs.levels",
+			);
+
+			throw new Error();
+		}
+
+		return config;
 	} catch (error) {
 		if (error instanceof ValiError) {
 			console.error(

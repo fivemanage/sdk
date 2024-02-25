@@ -1,13 +1,4 @@
-export const LogLevel = {
-	Error: "error",
-	Warn: "warn",
-	Info: "info",
-	Debug: "debug",
-} as const;
-
-export type LogLevels = Enum<typeof LogLevel>;
-
-export const LogColor: Record<LogLevels, string> = {
+export const LogColor: Record<string, string> = {
 	error: "^8",
 	warn: "^6",
 	info: "^9",
@@ -21,7 +12,7 @@ export type LogMetadata = {
 };
 
 export type Log = {
-	level: LogLevels;
+	level: string;
 	message: string;
 	resource: string;
 	metadata: LogMetadata;

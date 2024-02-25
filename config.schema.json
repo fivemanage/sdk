@@ -17,8 +17,15 @@
 				"level": {
 					"description": "Default logger level",
 					"type": "string",
-					"enum": ["debug", "info", "warn", "error"],
 					"default": "info"
+				},
+				"levels": {
+					"description": "Logger levels to register",
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": ["error", "warn", "info", "debug"]
 				},
 				"console": {
 					"description": "Toggle console logging",
@@ -38,6 +45,7 @@
 			},
 			"required": [
 				"level",
+				"levels",
 				"console",
 				"enableCloudLogging",
 				"appendPlayerIdentifiers"
