@@ -7,6 +7,7 @@ This sdk simplifies interaction with our public API for FiveM server developers,
 - **[Dependencies](#resource-dependencies)**
 - **[Installation & Setup](#installation--setup)**
 - **[Working with Images](#working-with-images)**
+- **[Working with Logs](#working-with-logs)**
 
 ## **Resource Dependencies**
 
@@ -126,4 +127,54 @@ exports.fivemanage_sdk
   .then((imageData) => {
     console.log(imageData.url);
   });
+```
+
+## **Working with Logs**
+
+This section provides examples of how to use the `LogMessage` export on the server. It also includes explanations of the various settings within `config.json`, detailing how each can be configured to customize logging functionality.
+
+Examples are provided in both Lua and JavaScript. TypeScript developers can refer to the type annotations provided in the function definitions for guidance on the expected argument and return types.
+
+### **Config Settings:**
+
+- **"level"**: Sets the minimum log level to capture. "info" by default, meaning only logs of "info" level and above are recorded. **This value must be one of the options defined in the "levels" array**.
+
+- **"levels"**: Defines the hierarchy of log levels from most to least critical. Only levels included in this array can be used during runtime.
+
+- **"console"**: Enables or disables logging to the server console. Set to `true` to activate console logging.
+
+- **"enableCloudLogging"**: Determines whether logs should be sent to the Fivemanage cloud. Set to `false` to keep logs local or `true` to enable cloud logging.
+
+- **"appendPlayerIdentifiers"**: When `true`, player identifiers are automatically appended to the log's metadata if `metadata.playerSource` and/or `metadata.targetSource` are specified.
+
+### **Server Exports**
+
+**Function Definition:**
+
+```typescript
+LogMessage(level: string, message: string, metadata?: { playerSource?: string | number, targetSource?: string | number, [key: string]: unknown }): void
+```
+
+**Lua Example:**
+
+```lua
+exports.fivemanage_sdk:LogMessage("info", "Player connected", {
+    playerSource = source,
+    customData = "Additional info"
+})
+
+-- Without metadata
+exports.fivemanage_sdk:LogMessage("error", "An error occurred")
+```
+
+**JavaScript Example:**
+
+```javascript
+exports.fivemanage_sdk.LogMessage("info", "Player connected", {
+  playerSource: player.id,
+  customData: "Additional info"
+});
+
+// Without metadata
+exports.fivemanage_sdk.LogMessage("error", "An error occurred");
 ```
