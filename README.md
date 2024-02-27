@@ -8,6 +8,7 @@ This sdk simplifies interaction with our public API for FiveM server developers,
 - **[Installation & Setup](#installation--setup)**
 - **[Working with Images](#working-with-images)**
 - **[Working with Logs](#working-with-logs)**
+- **[Community & Support](#community--support)**
 
 ## **Resource Dependencies**
 
@@ -15,18 +16,18 @@ This sdk simplifies interaction with our public API for FiveM server developers,
 
 ## **Installation & Setup**
 
-1. **Download the SDK:** Obtain the latest release of the Fivemanage SDK from the **[release page](https://github.com/fivemanage/sdk/releases/latest)**. Ensure you download the `fivemanage_sdk.zip` file. It's recommended to download this release instead of cloning the repository unless you intend to build the project yourself.
+1. **Download the SDK:** Obtain the latest release of the Fivemanage SDK from the **[release page](https://github.com/fivemanage/sdk/releases/latest)**. Ensure you download the `fmsdk.zip` file. It's recommended to download this release instead of cloning the repository unless you intend to build the project yourself.
 
-2. **Extract to Resources:** Unzip and place the `fivemanage_sdk` folder into your FiveM server's `resources` folder.
+2. **Extract to Resources:** Unzip and place the `fmsdk` folder into your FiveM server's `resources` folder.
 
 3. **Setup Dependencies:** If not already present, download and set up `screenshot-basic` by following its **[installation instructions](https://github.com/citizenfx/screenshot-basic?tab=readme-ov-file#usage)**. This resource is essential for capturing client screen images.
 
 4. **Configure Server CFG:**
 
-   - Make sure `screenshot-basic` is started before `fivemanage_sdk` in your `server.cfg`. Add the following lines:
+   - Make sure `screenshot-basic` is started before `fmsdk` in your `server.cfg`. Add the following lines:
      ```
      ensure screenshot-basic  # Only add this line if `screenshot-basic` is not already ensured in your configuration.
-     ensure fivemanage_sdk    # The SDK must be started after the `screenshot-basic` resource.
+     ensure fmsdk    # The SDK must be started after the `screenshot-basic` resource.
      ```
    - Add the following ConVars to your `server.cfg` for API authentication:
      ```
@@ -56,10 +57,10 @@ takeImage(metadata?: Record<string, unknown>): Promise<{ url: string }>
 **Lua Example:**
 
 ```lua
-local imageData = exports.fivemanage_sdk:takeImage()
+local imageData = exports.fmsdk:takeImage()
 
 -- With metadata
-local imageData = exports.fivemanage_sdk:takeImage({
+local imageData = exports.fmsdk:takeImage({
     name = "My image",
     description = "This is my image",
     -- or any other field you want
@@ -71,12 +72,12 @@ print(imageData.url)
 **JavaScript Example:**
 
 ```javascript
-exports.fivemanage_sdk.takeImage().then((imageData) => {
+exports.fmsdk.takeImage().then((imageData) => {
   console.log(imageData.url);
 });
 
 // With metadata
-exports.fivemanage_sdk
+exports.fmsdk
   .takeImage({
     name: "My image",
     description: "This is my image",
@@ -98,10 +99,10 @@ takeServerImage(playerSource: string | number, metadata?: Record<string, unknown
 **Lua Example:**
 
 ```lua
-local imageData = exports.fivemanage_sdk:takeServerImage(playerSource)
+local imageData = exports.fmsdk:takeServerImage(playerSource)
 
 -- With metadata
-local imageData = exports.fivemanage_sdk:takeServerImage(playerSource, {
+local imageData = exports.fmsdk:takeServerImage(playerSource, {
     name = "My image",
     description = "This is my image",
     -- or any other field you want
@@ -113,12 +114,12 @@ print(imageData.url)
 **JavaScript Example:**
 
 ```javascript
-exports.fivemanage_sdk.takeServerImage(playerSource).then((imageData) => {
+exports.fmsdk.takeServerImage(playerSource).then((imageData) => {
   console.log(imageData.url);
 });
 
 // With metadata
-exports.fivemanage_sdk
+exports.fmsdk
   .takeServerImage(playerSource, {
     name: "My image",
     description: "This is my image",
@@ -158,23 +159,29 @@ LogMessage(level: string, message: string, metadata?: { playerSource?: string | 
 **Lua Example:**
 
 ```lua
-exports.fivemanage_sdk:LogMessage("info", "Player connected", {
+exports.fmsdk:LogMessage("info", "Player connected", {
     playerSource = source,
     customData = "Additional info"
 })
 
 -- Without metadata
-exports.fivemanage_sdk:LogMessage("error", "An error occurred")
+exports.fmsdk:LogMessage("error", "An error occurred")
 ```
 
 **JavaScript Example:**
 
 ```javascript
-exports.fivemanage_sdk.LogMessage("info", "Player connected", {
+exports.fmsdk.LogMessage("info", "Player connected", {
   playerSource: player.id,
   customData: "Additional info"
 });
 
 // Without metadata
-exports.fivemanage_sdk.LogMessage("error", "An error occurred");
+exports.fmsdk.LogMessage("error", "An error occurred");
 ```
+
+## Community & Support
+
+Join our community on [Discord](https://discord.gg/NCsp2ZB3Ye)! It's the perfect place to ask questions, provide feedback, and connect with other users and the development team. If you need direct support or have specific inquiries, feel free to open a support ticket in our Discord server. 
+
+We're here to help and look forward to your contributions and discussions.
