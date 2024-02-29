@@ -29,7 +29,6 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
           run_install: false
 
       - name: Get pnpm store directory
@@ -46,37 +45,26 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install server dependencies
-        run: cd server/image && pnpm install --no-frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
 
-      - name: Build server
-        run: cd server/image && pnpm build
+      - name: Build project
+        run: pnpm run build
 
       - name: Bundle built files
         run: |
-          mkdir -p ./temp/fivemanage_lib
-          cp ./fxmanifest.lua ./temp/fivemanage_lib/
-          cp -r ./client ./temp/fivemanage_lib/client
-
-          mkdir -p ./temp/fivemanage_lib/server
-          cp ./server/{main.lua,heartbeat.lua} ./temp/fivemanage_lib/server
-          cp -r ./server/dist ./temp/fivemanage_lib/server
-          cp -r ./server/logs ./temp/fivemanage_lib/server
-
-          cp -r ./shared ./temp/fivemanage_lib/shared
-
-          #cp -r ./server/dist ./temp/fivemanage_lib/server
-          #rm ./temp/fivemanage_lib/server/image
-
-          cd ./temp && zip -r ../fivemanage_lib ./fivemanage_lib
+          mkdir -p ./temp/fmsdk
+          cp ./{README.md,LICENSE,fxmanifest.lua,config.schema.json,config.json} ./temp/fmsdk
+          cp -r ./dist ./temp/fmsdk/dist
+          cd ./temp && zip -r ../fmsdk.zip ./fmsdk
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.FIVEMANAGE_WORKFLOW }}
-          name: Fivemanage API SDK | ${{ steps.get_tag.outputs.VERSION_TAG }}
+          name: Fivemanage SDK | ${{ steps.get_tag.outputs.VERSION_TAG }}
           prerelease: false
-          files: fivemanage_lib.zip
+          files: fmsdk.zip
 
         env:
           CI: false
