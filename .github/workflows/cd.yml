@@ -9,8 +9,12 @@ jobs:
     name: Build and create release
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       packages: write
+      id-token: write
+      contents: write
+      actions: write
+      deployments: write
+      pull-requests: read
 
     steps:
       - name: Get tag
