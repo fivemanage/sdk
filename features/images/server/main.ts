@@ -32,30 +32,34 @@ async function uploadImage(
 	data: string,
 	metadata?: Record<string, unknown>,
 ): Promise<ImageUploadResponse> {
-	const buf = Buffer.from(data.split(",")[1] ?? "", "base64");
-	const form = new FormData();
+	try {
+		const buf = Buffer.from(data.split(",")[1] ?? "", "base64");
+		const form = new FormData();
 
-	form.append("image", buf, "image.png");
+		form.append("image", buf, "image.png");
 
-	if (metadata) {
-		form.append("metadata", JSON.stringify(metadata));
+		if (metadata) {
+			form.append("metadata", JSON.stringify(metadata));
+		}
+
+		const res = await fetch(apiUrl, {
+			method: "POST",
+			body: form,
+			headers: {
+				Authorization: convars.FIVEMANAGE_MEDIA_API_KEY,
+			},
+		});
+
+		if (res.ok === false) {
+			throw new Error("Failed to upload image to Fivemanage");
+		}
+
+		const resData = parse(ImageUploadResponseSchema, await res.json());
+
+		return resData;
+	} catch (err) {
+		throw new Error(`Failed to upload image to Fivemanage: ${err}`);
 	}
-
-	const res = await fetch(apiUrl, {
-		method: "POST",
-		body: form,
-		headers: {
-			Authorization: convars.FIVEMANAGE_MEDIA_API_KEY,
-		},
-	});
-
-	if (res.ok === false) {
-		throw new Error("Failed to upload image to Fivemanage");
-	}
-
-	const resData = parse(ImageUploadResponseSchema, await res.json());
-
-	return resData;
 }
 
 async function requestClientScreenshot(
@@ -77,7 +81,12 @@ async function requestClientScreenshot(
 			playerSrc,
 			{ encoding: "png", quality: 0.85 },
 			async (_: false | string, data: string) => {
-				resolve(await uploadImage(data, metadata));
+				try {
+					resolve(await uploadImage(data, metadata));
+				} catch (error) {
+					const errorMsg = getErrorMessage(error);
+					console.error(errorMsg);
+				}
 			},
 		);
 	});
