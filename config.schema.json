@@ -41,6 +41,24 @@
 					"description": "Should player identifiers be appended to log metadata? See documentation for more info",
 					"type": "boolean",
 					"default": true
+				},
+				"excludedPlayerIdentifiers": {
+					"description": "Player identifier types to exclude from appended identifier metadata",
+					"type": "array",
+					"items": {
+						"type": "string",
+						"enum": [
+							"discord",
+							"fivem",
+							"ip",
+							"license",
+							"license2",
+							"live",
+							"steam",
+							"xbl"
+						]
+					},
+					"default": []
 				}
 			},
 			"required": [
@@ -48,7 +66,8 @@
 				"levels",
 				"console",
 				"enableCloudLogging",
-				"appendPlayerIdentifiers"
+				"appendPlayerIdentifiers",
+				"excludedPlayerIdentifiers"
 			]
 		}
 	},

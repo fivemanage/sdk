@@ -148,6 +148,8 @@ Examples are provided in both Lua and JavaScript. TypeScript developers can refe
 
 - **"appendPlayerIdentifiers"**: When `true`, player identifiers are automatically appended to the log's metadata if `metadata.playerSource` and/or `metadata.targetSource` are specified.
 
+- **"excludedPlayerIdentifiers"**: A list of identifier types that will be excluded from appended identifier metadata.
+
 ### **Server Exports**
 
 **Function Definition:**

@@ -1,4 +1,5 @@
 import { LRUCache } from "lru-cache";
+import { config } from "~/utils/common/config";
 
 export type IdentifierType =
 	| "discord"
@@ -36,9 +37,10 @@ export function getFormattedPlayerIdentifiers(
 	for (const identifier of getPlayerIdentifiers(source)) {
 		const splitId = identifier.split(":");
 
-		if (splitId[0] && splitId[1]) {
-			identifiers[splitId[0] as IdentifierType] = splitId[1];
-		}
+		if (!splitId[0] || !splitId[1]) continue;
+		if (config.logs.excludedPlayerIdentifiers.includes(splitId[0])) continue;
+
+		identifiers[splitId[0] as IdentifierType] = splitId[1];
 	}
 
 	identifierCache.set(source, identifiers);

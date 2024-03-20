@@ -17,6 +17,7 @@ const ConfigSchema = object({
 		console: boolean(),
 		enableCloudLogging: boolean(),
 		appendPlayerIdentifiers: boolean(),
+		excludedPlayerIdentifiers: array(string([minLength(1)])),
 	}),
 });
 

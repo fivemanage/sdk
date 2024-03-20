@@ -5,6 +5,7 @@
 		"levels": ["error", "warn", "info", "debug"],
 		"console": false,
 		"enableCloudLogging": true,
-		"appendPlayerIdentifiers": true
+		"appendPlayerIdentifiers": true,
+		"excludedPlayerIdentifiers": []
 	}
 }
