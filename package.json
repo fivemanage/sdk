@@ -19,13 +19,13 @@
 		"typescript": "^5.3.3"
 	},
 	"dependencies": {
+		"@fivemanage/winston": "^0.1.0",
 		"@paralleldrive/cuid2": "^2.2.2",
 		"form-data": "^4.0.0",
 		"lru-cache": "^10.2.0",
 		"node-fetch": "2",
 		"valibot": "^0.29.0",
-		"winston": "^3.11.0",
-		"winston-transport": "^4.7.0"
+		"winston": "^3.11.0"
 	},
 	"packageManager": "pnpm@8.15.3"
 }

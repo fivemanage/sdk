@@ -1,7 +1,7 @@
 import { createLogger, transports, format } from "winston";
 import { config } from "~/utils/common/config";
 import { LogColor, type LogMetadata } from "~/logs/common/misc";
-import { FivemanageTransport } from "~/logs/server/transport";
+import { FivemanageTransport } from "@fivemanage/winston";
 import { getFormattedPlayerIdentifiers } from "~/utils/server/identifiers";
 import {
 	minLength,
@@ -13,6 +13,7 @@ import {
 	ValiError,
 	flatten,
 } from "valibot";
+import { convars } from "~/utils/server/convars";
 
 const levels = config.logs.levels.reduce<Record<string, number>>(
 	(acc, curr, idx) => {
@@ -45,7 +46,11 @@ if (config.logs.console === true) {
 }
 
 if (config.logs.enableCloudLogging === true) {
-	logger.add(new FivemanageTransport());
+	logger.add(
+		new FivemanageTransport({
+			apiKey: convars.FIVEMANAGE_LOGS_API_KEY,
+		}),
+	);
 }
 
 const LogSchema = object({
