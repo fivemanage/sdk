@@ -1,6 +1,6 @@
 {
 	"name": "fivemanage-sdk",
-	"version": "0.0.0",
+	"version": "2.1.1",
 	"license": "GPL-3.0-or-later",
 	"private": true,
 	"scripts": {
@@ -19,7 +19,7 @@
 		"typescript": "^5.3.3"
 	},
 	"dependencies": {
-		"@fivemanage/winston": "^0.1.0",
+		"@fivemanage/winston": "^0.3.0",
 		"@paralleldrive/cuid2": "^2.2.2",
 		"form-data": "^4.0.0",
 		"lru-cache": "^10.2.0",
