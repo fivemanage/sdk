@@ -3,9 +3,10 @@
 	"logs": {
 		"level": "info",
 		"levels": ["error", "warn", "info", "debug"],
-		"console": false,
+		"console": true,
 		"enableCloudLogging": true,
 		"appendPlayerIdentifiers": true,
-		"excludedPlayerIdentifiers": []
+		"excludedPlayerIdentifiers": [],
+		"defaultEvents": ["playerConnecting", "playerDropped", "chatMessage"]
 	}
 }

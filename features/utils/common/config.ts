@@ -18,6 +18,7 @@ const ConfigSchema = object({
 		enableCloudLogging: boolean(),
 		appendPlayerIdentifiers: boolean(),
 		excludedPlayerIdentifiers: array(string([minLength(1)])),
+		eventLogs: array(string()),
 	}),
 });
 

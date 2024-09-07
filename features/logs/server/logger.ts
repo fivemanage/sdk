@@ -108,3 +108,28 @@ function registerExports() {
 export function startLogsFeature() {
 	registerExports();
 }
+ 
+
+
+if (config.logs.eventLogs.includes("chatMessage")) {
+	onNet('chatMessage', (src: number, playerName: string, content: string)=>{
+		log("info", `Chat message from ${playerName}`, {
+			playerSource: src,
+			chatMessage: content,
+			playerName: playerName,
+		});
+	})
+}
+
+if (config.logs.eventLogs.includes("playerDropped")) {
+	on("playerDropped", (reason: string) => {
+		const _source = global.source;
+		const playerName = GetPlayerName(_source.toString())
+	
+		log("info", `Player ${playerName} dropped`, {
+			playerSource: _source,
+			playerName: playerName,
+			reason: reason,
+		})
+	});
+}
