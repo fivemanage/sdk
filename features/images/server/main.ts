@@ -33,10 +33,12 @@ async function uploadImage(
 	metadata?: Record<string, unknown>,
 ): Promise<ImageUploadResponse> {
 	try {
-		const buf = Buffer.from(data.split(",")[1] ?? "", "base64");
 		const form = new FormData();
 
-		form.append("image", buf, "image.png");
+		const base64String = data.split(",")[1] ?? "";
+		const buffer = Buffer.from(base64String, "base64");
+
+		form.append("image", buffer, "image.png");
 
 		if (metadata) {
 			form.append("metadata", JSON.stringify(metadata));

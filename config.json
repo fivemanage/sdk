@@ -7,6 +7,6 @@
 		"enableCloudLogging": true,
 		"appendPlayerIdentifiers": true,
 		"excludedPlayerIdentifiers": [],
-		"defaultEvents": ["playerConnecting", "playerDropped", "chatMessage"]
+		"defaultEvents": true
 	}
 }

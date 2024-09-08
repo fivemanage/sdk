@@ -111,7 +111,7 @@ export function startLogsFeature() {
  
 
 
-if (config.logs.eventLogs.includes("chatMessage")) {
+if (config.logs.defaultEvents) {
 	onNet('chatMessage', (src: number, playerName: string, content: string)=>{
 		log("info", `Chat message from ${playerName}`, {
 			playerSource: src,
@@ -119,9 +119,16 @@ if (config.logs.eventLogs.includes("chatMessage")) {
 			playerName: playerName,
 		});
 	})
-}
 
-if (config.logs.eventLogs.includes("playerDropped")) {
+	on("playerConnecting", (name: string) => {
+		const _source = global.source;
+	
+		log("info", `Player ${name} connecting`, {
+			playerSource: _source,
+			playerName: name,
+		})
+	});
+
 	on("playerDropped", (reason: string) => {
 		const _source = global.source;
 		const playerName = GetPlayerName(_source.toString())
