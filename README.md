@@ -150,6 +150,10 @@ Examples are provided in both Lua and JavaScript. TypeScript developers can refe
 
 - **"excludedPlayerIdentifiers"**: A list of identifier types that will be excluded from appended identifier metadata.
 
+- **"playerEvents"**: Enable player events like connecting and dropped.
+
+- **"chatEvents"**: Enable chat events. (this might cause a lot of logs)
+
 ### **Server Exports**
 
 **Function Definition:**
