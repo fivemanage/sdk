@@ -8,6 +8,7 @@
 		"appendPlayerIdentifiers": true,
 		"excludedPlayerIdentifiers": ["ip"],
 		"playerEvents": true,
-		"chatEvents": true
+		"chatEvents": true,
+		"baseEvents": true
 	}
 }
