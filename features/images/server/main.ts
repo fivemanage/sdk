@@ -67,32 +67,48 @@ async function uploadImage(
 async function requestClientScreenshot(
 	playerSrc: string | number,
 	metadata?: Record<string, unknown>,
+	timeout?: number, // Optional timeout parameter
 ): Promise<ImageUploadResponse> {
+	// Validate playerSrc (must be a non-empty string or number)
 	parse(
 		union(
 			[string([minLength(1)]), number()],
-			"Player source must be a non-empty string or number",
+			"Player source must be a non-empty string or number"
 		),
-		playerSrc,
+		playerSrc
 	);
 
+	// Validate metadata (can be nullish or malformed record)
 	parse(nullish(record(unknown(), "Image metadata is malformed")), metadata);
 
-	return await new Promise((resolve) => {
+	return await new Promise((resolve, reject) => {
+		// Handle the optional timeout, if provided
+		let timeoutId: NodeJS.Timeout | undefined;
+
+		if (timeout) {
+			timeoutId = setTimeout(() => {
+				reject(new Error("Screenshot request timed out"));
+			}, timeout);
+		}
+
 		exports["screenshot-basic"]?.requestClientScreenshot?.(
 			playerSrc,
 			{ encoding: "png", quality: 0.85 },
 			async (_: false | string, data: string) => {
 				try {
-					resolve(await uploadImage(data, metadata));
+					if (timeoutId) clearTimeout(timeoutId); // Clear timeout on success
+					const uploadResponse = await uploadImage(data, metadata);
+					resolve(uploadResponse);
 				} catch (error) {
 					const errorMsg = getErrorMessage(error);
 					console.error(errorMsg);
+					reject(new Error(errorMsg)); // Properly reject the promise
 				}
-			},
+			}
 		);
 	});
 }
+
 
 function registerRPCListeners() {
 	registerRPCListener<Record<string, unknown> | undefined, ImageUploadResponse>(
