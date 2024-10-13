@@ -15,6 +15,11 @@ import {
 } from "valibot";
 import { convars } from "~/utils/server/convars";
 
+import './player'
+import './chat';
+//import './baseevents';
+//import './txadmin'
+
 const levels = config.logs.levels.reduce<Record<string, number>>(
 	(acc, curr, idx) => {
 		acc[curr] = idx;
@@ -59,7 +64,7 @@ const LogSchema = object({
 	metadata: record(unknown()),
 });
 
-function log(level: string, message: string, metadata: LogMetadata = {}) {
+export function log(level: string, message: string, metadata: LogMetadata = {}) {
 	try {
 		parse(LogSchema, { level, message, metadata });
 
@@ -107,36 +112,4 @@ function registerExports() {
 
 export function startLogsFeature() {
 	registerExports();
-}
- 
-
-
-if (config.logs.defaultEvents) {
-	onNet('chatMessage', (src: number, playerName: string, content: string)=>{
-		log("info", `Chat message from ${playerName}`, {
-			playerSource: src,
-			chatMessage: content,
-			playerName: playerName,
-		});
-	})
-
-	on("playerConnecting", (name: string) => {
-		const _source = global.source;
-	
-		log("info", `Player ${name} connecting`, {
-			playerSource: _source,
-			playerName: name,
-		})
-	});
-
-	on("playerDropped", (reason: string) => {
-		const _source = global.source;
-		const playerName = GetPlayerName(_source.toString())
-	
-		log("info", `Player ${playerName} dropped`, {
-			playerSource: _source,
-			playerName: playerName,
-			reason: reason,
-		})
-	});
 }

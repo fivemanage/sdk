@@ -6,7 +6,8 @@
 		"console": true,
 		"enableCloudLogging": true,
 		"appendPlayerIdentifiers": true,
-		"excludedPlayerIdentifiers": [],
-		"defaultEvents": true
+		"excludedPlayerIdentifiers": ["ip"],
+		"playerEvents": true,
+		"chatEvents": true
 	}
 }

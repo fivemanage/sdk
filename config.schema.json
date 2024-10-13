@@ -59,6 +59,21 @@
 						]
 					},
 					"default": []
+				},
+				"playerEvents": {
+					"description": "Enable player events like connecting and dropped.",
+					"type": "boolean",
+					"default": true
+				},
+				"chatEvents": {
+					"description": "Enable chat events.",
+					"type": "boolean",
+					"default": true
+				},
+				"baseEvents": {
+					"description": "Enable base events like onPlayerDied and onPlayerKilled.",
+					"type": "boolean",
+					"default": true
 				}
 			},
 			"required": [
@@ -67,7 +82,9 @@
 				"console",
 				"enableCloudLogging",
 				"appendPlayerIdentifiers",
-				"excludedPlayerIdentifiers"
+				"excludedPlayerIdentifiers",
+				"playerEvents",
+				"chatEvents"
 			]
 		}
 	},
