@@ -21,6 +21,7 @@ const ConfigSchema = object({
 		playerEvents: boolean(),
 		chatEvents: boolean(),
 		baseEvents: boolean(),
+		txAdminEvents: boolean(),
 	}),
 });
 

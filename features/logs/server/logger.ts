@@ -18,7 +18,7 @@ import { convars } from "~/utils/server/convars";
 import './player'
 import './chat';
 //import './baseevents';
-//import './txadmin'
+import './txadmin'
 
 const levels = config.logs.levels.reduce<Record<string, number>>(
 	(acc, curr, idx) => {
