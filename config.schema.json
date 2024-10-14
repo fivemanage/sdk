@@ -74,6 +74,11 @@
 					"description": "Enable base events like onPlayerDied and onPlayerKilled.",
 					"type": "boolean",
 					"default": true
+				},
+				"txAdminEvents": {
+					"description": "Enable txAdmin events like playerKicked, playerWarned, playerBanned and playerWhitelisted.",
+					"type": "boolean",
+					"default": true
 				}
 			},
 			"required": [
@@ -84,7 +89,8 @@
 				"appendPlayerIdentifiers",
 				"excludedPlayerIdentifiers",
 				"playerEvents",
-				"chatEvents"
+				"chatEvents",
+				"txAdminEvents"
 			]
 		}
 	},
