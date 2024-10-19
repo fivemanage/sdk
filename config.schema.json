@@ -70,10 +70,10 @@
 					"type": "boolean",
 					"default": true
 				},
-				"baseEvents": {
-					"description": "Enable base events like onPlayerDied and onPlayerKilled.",
+				"txAdminEvents": {
+					"description": "Enable txAdmin events to be logged.",
 					"type": "boolean",
-					"default": true
+					"default": false
 				}
 			},
 			"required": [
@@ -84,7 +84,8 @@
 				"appendPlayerIdentifiers",
 				"excludedPlayerIdentifiers",
 				"playerEvents",
-				"chatEvents"
+				"chatEvents",
+				"txAdminEvents"
 			]
 		}
 	},
