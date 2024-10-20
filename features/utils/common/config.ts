@@ -20,7 +20,7 @@ const ConfigSchema = object({
 		excludedPlayerIdentifiers: array(string([minLength(1)])),
 		playerEvents: boolean(),
 		chatEvents: boolean(),
-		baseEvents: boolean(),
+		txAdminEvents: boolean(),
 	}),
 });
 

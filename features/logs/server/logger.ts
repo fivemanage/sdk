@@ -1,6 +1,6 @@
 import { createLogger, transports, format } from "winston";
 import { config } from "~/utils/common/config";
-import { LogColor, type LogMetadata } from "~/logs/common/misc";
+import { LogColor, type _InternalOptions, type LogMetadata } from "~/logs/common/misc";
 import { FivemanageTransport } from "@fivemanage/winston";
 import { getFormattedPlayerIdentifiers } from "~/utils/server/identifiers";
 import {
@@ -17,8 +17,7 @@ import { convars } from "~/utils/server/convars";
 
 import './player'
 import './chat';
-//import './baseevents';
-//import './txadmin'
+import './txadmin'
 
 const levels = config.logs.levels.reduce<Record<string, number>>(
 	(acc, curr, idx) => {
@@ -64,7 +63,7 @@ const LogSchema = object({
 	metadata: record(unknown()),
 });
 
-export function log(level: string, message: string, metadata: LogMetadata = {}) {
+export function log(level: string, message: string, metadata: LogMetadata = {}, _internalOpts?: _InternalOptions) {
 	try {
 		parse(LogSchema, { level, message, metadata });
 
@@ -89,7 +88,7 @@ export function log(level: string, message: string, metadata: LogMetadata = {}) 
 		}
 
 		logger.log(level, message, {
-			resource: meta._resourceName,
+			resource: _internalOpts?._internal_RESOURCE ?? meta._resourceName,
 			metadata: meta,
 		});
 	} catch (error) {

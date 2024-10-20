@@ -17,3 +17,7 @@ export type Log = {
 	resource: string;
 	metadata: LogMetadata;
 };
+
+export type _InternalOptions = {
+	_internal_RESOURCE: string;
+}

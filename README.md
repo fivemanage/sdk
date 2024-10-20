@@ -168,6 +168,7 @@ Examples are provided in both Lua and JavaScript. TypeScript developers can refe
 - **"playerEvents"**: Enable player events like connecting and dropped.
 
 - **"chatEvents"**: Enable chat events. (this might cause a lot of logs)
+- **"txAdminEvents"**: Enable txAdmin events.
 
 ### **Server Exports**
 
