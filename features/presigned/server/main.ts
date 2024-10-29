@@ -2,8 +2,7 @@ import { object, parse, string, url, picklist } from "valibot"
 import { convars } from "~/utils/server/convars"
 import fetch from 'node-fetch'
 
-const apiUrl = 'https://api.fivemanage.com/api/presigned-url'
-
+const API_URL = 'https://api.fivemanage.com/api/presigned-url'
 
 const PresignedRequestSchema = picklist(['image', 'audio' ,'video'], 'File type must be one of "image", "audio" or "video"')
 
@@ -21,16 +20,14 @@ const PresignedResponseSchema = object(
 async function requestPresignedUrl(fileType: string): Promise<PresignedResponse['presignedUrl']> {
     const parsedFileType = parse(PresignedRequestSchema, fileType)
 
-	const res = await fetch(`${apiUrl}?fileType=${parsedFileType}`, {
+	const res = await fetch(`${API_URL}?fileType=${parsedFileType}`, {
 		method: 'GET',
 		headers: {
 			Authorization: convars.FIVEMANAGE_MEDIA_API_KEY,
 		},
 	})
 
-	if (res.ok === false) {
-		throw new Error('Failed to request presigned url')
-	}
+	if (!res.ok) throw new Error('Failed to request presigned url');
 
 	const { presignedUrl } = parse(PresignedResponseSchema, await res.json())
 
