@@ -9,6 +9,7 @@
 		"excludedPlayerIdentifiers": ["ip"],
 		"playerEvents": true,
 		"chatEvents": true,
+		"baseEvents": true
 		"txAdminEvents": false
 	}
 }

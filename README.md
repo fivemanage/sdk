@@ -93,7 +93,7 @@ exports.fmsdk
 **Function Definition:**
 
 ```typescript
-takeServerImage(playerSource: string | number, metadata?: Record<string, unknown>): Promise<{ url: string }>
+takeServerImage(playerSource: string | number, metadata?: Record<string, unknown>, timeout?: number): Promise<{ url: string }>
 ```
 
 **Lua Example:**
@@ -109,6 +109,21 @@ local imageData = exports.fmsdk:takeServerImage(playerSource, {
 })
 
 print(imageData.url)
+
+
+-- With metadata and timeout support.
+local success, imageData = pcall(function()
+    return exports.fmsdk:takeServerImage(source, {
+        name = 'My image',
+        description = 'This is my image',
+    }, 10000)
+end)
+
+if success then
+    print(imageData.url)
+else
+    error('we are unable to capture screenshot to player.')
+end
 ```
 
 **JavaScript Example:**
