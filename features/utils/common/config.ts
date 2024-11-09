@@ -1,57 +1,46 @@
-import {
-	type Output,
-	ValiError,
-	boolean,
-	string,
-	array,
-	minLength,
-	flatten,
-	object,
-	parse,
-} from "valibot";
+import { z, ZodError } from "zod";
 
-const ConfigSchema = object({
-	logs: object({
-		level: string([minLength(1)]),
-		levels: array(string([minLength(1)])),
-		console: boolean(),
-		enableCloudLogging: boolean(),
-		appendPlayerIdentifiers: boolean(),
-		excludedPlayerIdentifiers: array(string([minLength(1)])),
-		playerEvents: boolean(),
-		chatEvents: boolean(),
-		txAdminEvents: boolean(),
-	}),
+const configSchema = z.object({
+  logs: z.object({
+    level: z.string().min(1),
+    levels: z.array(z.string().min(1)),
+    console: z.boolean(),
+    enableCloudLogging: z.boolean(),
+    appendPlayerIdentifiers: z.boolean(),
+    excludedPlayerIdentifiers: z.array(z.string().min(1)),
+    playerEvents: z.boolean(),
+    chatEvents: z.boolean(),
+    txAdminEvents: z.boolean(),
+  }),
 });
 
-function loadConfig(): Output<typeof ConfigSchema> {
-	try {
-		const config = parse(
-			ConfigSchema,
-			JSON.parse(LoadResourceFile(GetCurrentResourceName(), "config.json")),
-		);
+function loadConfig(): z.infer<typeof configSchema> {
+  try {
+    const config = configSchema.parse(
+      JSON.parse(LoadResourceFile(GetCurrentResourceName(), "config.json"))
+    );
 
-		if (config.logs.levels.includes(config.logs.level) === false) {
-			console.error(
-				"Invalid config settings, logs.level must be in logs.levels",
-			);
+    if (config.logs.levels.includes(config.logs.level) === false) {
+      console.error(
+        "Invalid config settings, logs.level must be in logs.levels"
+      );
 
-			throw new Error();
-		}
+      throw new Error();
+    }
 
-		return config;
-	} catch (error) {
-		if (error instanceof ValiError) {
-			console.error(
-				"❌ Invalid config settings:\n",
-				flatten<typeof ConfigSchema>(error).nested,
-			);
+    return config;
+  } catch (error) {
+    if (error instanceof ZodError) {
+      console.error(
+        "❌ Invalid config settings:\n",
+        error.errors.map((err) => err.message).join(", ")
+      );
 
-			throw new Error("Invalid config settings");
-		}
+      throw new Error("Invalid config settings");
+    }
 
-		throw new Error("Error loading config");
-	}
+    throw new Error("Error loading config");
+  }
 }
 
 export const config = loadConfig();
