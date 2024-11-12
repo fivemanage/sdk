@@ -31,6 +31,7 @@
     "koa-router": "^13.0.1",
     "lru-cache": "^10.2.0",
     "node-fetch": "2",
+    "uuid": "^11.0.3",
     "valibot": "^0.29.0",
     "winston": "^3.11.0"
   },
