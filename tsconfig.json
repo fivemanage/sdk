@@ -1,12 +1,12 @@
 {
-	"$schema": "https://json.schemastore.org/tsconfig",
-	"compilerOptions": {
-		"paths": {
-			"~/*": ["./features/*"]
-		}
-	},
-	"references": [
-		{ "path": "./tsconfig.server.json" },
-		{ "path": "./tsconfig.client.json" }
-	]
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "paths": {
+      "~/*": ["./features/*"]
+    }
+  },
+  "references": [
+    { "path": "./tsconfig.server.json" },
+    { "path": "./tsconfig.client.json" }
+  ]
 }

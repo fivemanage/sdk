@@ -4,54 +4,54 @@ const serverRPCTimeoutLength = 20000;
 let counter = 0;
 
 export function registerRPCListener<T = undefined, U = undefined>(
-	eventName: string,
-	cb: ClientRPCCallback<T, U>,
+  eventName: string,
+  cb: ClientRPCCallback<T, U>
 ): void {
-	onNet(eventName, (respEventName: string, data: T) => {
-		Promise.resolve(cb(data))
-			.then((respData) => {
-				emitNet(respEventName, respData);
-			})
-			.catch((error) => {
-				emitNet(respEventName, {
-					success: false,
-					errorMsg: getErrorMessage(error),
-				});
-			});
-	});
+  onNet(eventName, (respEventName: string, data: T) => {
+    Promise.resolve(cb(data))
+      .then((respData) => {
+        emitNet(respEventName, respData);
+      })
+      .catch((error) => {
+        emitNet(respEventName, {
+          success: false,
+          errorMsg: getErrorMessage(error),
+        });
+      });
+  });
 }
 
 export function triggerServerRPC<T = undefined, U = undefined>(
-	eventName: string,
-	data?: T,
+  eventName: string,
+  data?: T
 ): Promise<RPCResponse<U>> {
-	return new Promise((res) => {
-		let hasTimedOut = false;
+  return new Promise((res) => {
+    let hasTimedOut = false;
 
-		const timeoutId = setTimeout(() => {
-			hasTimedOut = true;
+    const timeoutId = setTimeout(() => {
+      hasTimedOut = true;
 
-			res({
-				success: false,
-				errorMsg: `Server RPC "${eventName}" has timed out after ${serverRPCTimeoutLength}ms`,
-			});
-		}, serverRPCTimeoutLength);
+      res({
+        success: false,
+        errorMsg: `Server RPC "${eventName}" has timed out after ${serverRPCTimeoutLength}ms`,
+      });
+    }, serverRPCTimeoutLength);
 
-		const listenEventName = `${eventName}:${counter++}-${Math.floor(
-			Math.random() * Number.MAX_SAFE_INTEGER,
-		).toString(36)}`;
+    const listenEventName = `${eventName}:${counter++}-${Math.floor(
+      Math.random() * Number.MAX_SAFE_INTEGER
+    ).toString(36)}`;
 
-		emitNet(eventName, listenEventName, data);
+    emitNet(eventName, listenEventName, data);
 
-		function handleServerResponse(resData: RPCResponse<U>) {
-			removeEventListener(listenEventName, handleServerResponse);
+    function handleServerResponse(resData: RPCResponse<U>) {
+      removeEventListener(listenEventName, handleServerResponse);
 
-			if (hasTimedOut) return;
-			clearTimeout(timeoutId);
+      if (hasTimedOut) return;
+      clearTimeout(timeoutId);
 
-			res(resData);
-		}
+      res(resData);
+    }
 
-		onNet(listenEventName, handleServerResponse);
-	});
+    onNet(listenEventName, handleServerResponse);
+  });
 }

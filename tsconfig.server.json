@@ -1,31 +1,32 @@
 {
-	"$schema": "https://json.schemastore.org/tsconfig",
-	"display": "Server FiveM",
-	"compilerOptions": {
-		"paths": {
-			"~/*": ["./features/*"]
-		},
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"target": "es6",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"strict": true,
-		"noUncheckedIndexedAccess": true,
-		"moduleResolution": "node",
-		"module": "commonjs",
-		"declaration": true,
-		"composite": true,
-		"declarationMap": true,
-		"lib": ["es2017"],
-		"strictNullChecks": true,
-		"noImplicitAny": true,
-		"forceConsistentCasingInFileNames": true,
-		"types": ["@citizenfx/server", "@types/node"]
-	},
-	"include": [
-		"./features/**/server/**/*",
-		"./features/**/common/**/*",
-		"./global.d.ts"
-	]
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Server FiveM",
+  "compilerOptions": {
+    "paths": {
+      "~/*": ["./features/*"],
+      "*": ["./types/*"]
+    },
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es6",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "declaration": true,
+    "composite": true,
+    "declarationMap": true,
+    "lib": ["es2017"],
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["@citizenfx/server", "@types/node"]
+  },
+  "include": [
+    "./features/**/server/**/*",
+    "./features/**/common/**/*",
+    "./global.d.ts"
+  ]
 }

@@ -1,31 +1,38 @@
 {
-	"name": "fivemanage-sdk",
-	"version": "2.1.1",
-	"license": "GPL-3.0-or-later",
-	"private": true,
-	"scripts": {
-		"build": "node scripts/esbuild.config.js",
-		"dev": "node scripts/esbuild.config.js --watch --restart"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^1.5.3",
-		"@citizenfx/client": "2.0.7290-1",
-		"@citizenfx/server": "2.0.7290-1",
-		"@types/node": "^20.11.19",
-		"@types/node-fetch": "2",
-		"colorette": "^2.0.20",
-		"esbuild": "^0.20.1",
-		"rcon": "^1.1.0",
-		"typescript": "^5.3.3"
-	},
-	"dependencies": {
-		"@fivemanage/winston": "^0.3.0",
-		"@paralleldrive/cuid2": "^2.2.2",
-		"form-data": "^4.0.0",
-		"lru-cache": "^10.2.0",
-		"node-fetch": "2",
-		"valibot": "^0.29.0",
-		"winston": "^3.11.0"
-	},
-	"packageManager": "pnpm@8.15.3"
+  "name": "fivemanage-sdk",
+  "version": "2.1.1",
+  "license": "GPL-3.0-or-later",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/esbuild.config.js",
+    "dev": "node scripts/esbuild.config.js --watch --restart"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.5.3",
+    "@citizenfx/client": "2.0.7290-1",
+    "@citizenfx/server": "2.0.7290-1",
+    "@types/node": "^20.11.19",
+    "@types/node-fetch": "2",
+    "colorette": "^2.0.20",
+    "esbuild": "^0.20.1",
+    "rcon": "^1.1.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@citizenfx/http-wrapper": "^0.2.2",
+    "@fivemanage/winston": "^0.3.0",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@types/koa": "^2.15.0",
+    "@types/koa-router": "^7.4.8",
+    "form-data": "^4.0.0",
+    "koa": "^2.15.3",
+    "koa-body": "^6.0.1",
+    "koa-ratelimit": "^5.1.0",
+    "koa-router": "^13.0.1",
+    "lru-cache": "^10.2.0",
+    "node-fetch": "2",
+    "valibot": "^0.29.0",
+    "winston": "^3.11.0"
+  },
+  "packageManager": "pnpm@9.12.3"
 }
