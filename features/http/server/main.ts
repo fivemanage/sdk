@@ -26,6 +26,7 @@ export async function startHttpFeature() {
   router.get("/actions", async (ctx) => {
     const actions = Object.keys(globalThis.actions).map((action) => {
       return {
+        id: action,
         name: globalThis.actions[action]?.name,
         description: globalThis.actions[action]?.description,
         inputSchema: globalThis.actions[action]?.inputSchema,
@@ -86,8 +87,8 @@ export async function startHttpFeature() {
     }
 
     try {
-      action.fn(inputs);
-      ctx.body = { success: true };
+      const result = action.fn(inputs);
+      ctx.body = { success: true, result };
     } catch (error) {
       ctx.status = 500;
       ctx.body = {
