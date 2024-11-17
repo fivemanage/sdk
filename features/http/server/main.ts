@@ -1,9 +1,9 @@
 import { setHttpCallback } from "@citizenfx/http-wrapper";
-
 import Koa from "koa";
 import koaBody from "koa-body";
 import Router from "koa-router";
-import type { ActionInput } from "~/actions/server/main";
+import { z } from "zod";
+import type { ActionSchema } from "~/actions/server/main";
 
 const authMiddleware = async (ctx: Koa.Context, next: Koa.Next) => {
   const authHeader = ctx.request.headers.authorization;
@@ -24,14 +24,12 @@ export async function startHttpFeature() {
   });
 
   router.get("/actions", async (ctx) => {
-    const actions = Object.keys(globalThis.actions).map((action) => {
-      return {
-        id: action,
-        name: globalThis.actions[action]?.name,
-        description: globalThis.actions[action]?.description,
-        inputSchema: globalThis.actions[action]?.inputSchema,
-      };
-    });
+    const actions = Object.entries(globalThis.actions).map(([id, action]) => ({
+      id,
+      name: action.name,
+      description: action.description,
+      inputSchema: action.inputSchema,
+    }));
 
     ctx.body = actions;
   });
@@ -40,7 +38,11 @@ export async function startHttpFeature() {
     const inputs = ctx.request.body;
     const actionId = ctx.params.id;
 
-    if (!actionId) return;
+    if (!actionId) {
+      ctx.status = 400;
+      ctx.body = { error: "Action ID is required" };
+      return;
+    }
 
     const action = globalThis.actions[actionId];
 
@@ -58,36 +60,53 @@ export async function startHttpFeature() {
 
     const validateInputs = (
       inputs: Record<string, unknown>,
-      schema: Array<ActionInput>
+      schema: z.infer<typeof ActionSchema>["inputSchema"]
     ) => {
-      for (const field of schema) {
-        if (field.required && !(field.name in inputs)) {
-          return {
-            valid: false,
-            error: `Missing required field: ${field.name}`,
-          };
-        }
-        // biome-ignore lint/suspicious/useValidTypeof: <explanation>
-        if (field.name in inputs && typeof inputs[field.name] !== field.type) {
-          return {
-            valid: false,
-            error: `Invalid type for field: ${field.name}`,
-          };
-        }
-      }
-      return { valid: true };
+      const inputSchema = z.object(
+        schema.reduce((acc, field) => {
+          const fieldSchema = (() => {
+            switch (field.type) {
+              case "string":
+              case "textarea":
+                return z.string();
+              case "number":
+              case "slider":
+                return z.number();
+              case "boolean":
+                return z.boolean();
+              case "date":
+                return z.string();
+              case "daterange":
+                return z.object({ from: z.string(), to: z.string() });
+              case "select":
+                return z.enum(field.options as [string, ...Array<string>]);
+              default:
+                return z.any();
+            }
+          })();
+
+          acc[field.name] = field.required
+            ? fieldSchema
+            : fieldSchema.optional();
+          return acc;
+        }, {} as Record<string, z.ZodTypeAny>)
+      );
+
+      return inputSchema.safeParse(inputs);
     };
 
     const validation = validateInputs(inputs, action.inputSchema);
 
-    if (!validation.valid) {
+    if (!validation.success) {
       ctx.status = 400;
-      ctx.body = { error: validation.error };
+      ctx.body = {
+        error: `Invalid inputs\n\n${JSON.stringify(validation.error.errors)}`,
+      };
       return;
     }
 
     try {
-      const result = action.fn(inputs);
+      const result = action.fn(validation.data);
       ctx.body = { success: true, result };
     } catch (error) {
       ctx.status = 500;
