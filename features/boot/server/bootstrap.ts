@@ -4,7 +4,7 @@ import { startHttpFeature } from "~/http/server/main";
 import { startImageFeature } from "~/images/server/main";
 import { startLogsFeature } from "~/logs/server/logger";
 import { startPresignedFeature } from "~/presigned/server/main";
-import { registerSdk } from "~/sdk/server/main";
+import { invalidateSDKResource, registerSdk } from "~/sdk/server/main";
 
 declare global {
   // biome-ignore lint: expected var
@@ -21,16 +21,23 @@ declare global {
 globalThis.serverSessionId = createId();
 globalThis.actions = {};
 
-async function boot() {
-  const sdkToken = await registerSdk();
+on("onResourceStart", async (resourceName: string) => {
+  if(GetCurrentResourceName() != resourceName) return;
+  
+  await invalidateSDKResource()
 
-  if (sdkToken) {
-    globalThis.sdkToken = sdkToken;
-
-    startHttpFeature();
-    startActionsFeature();
+  if (!globalThis.sdkToken) {
+    const sdkToken = await registerSdk();
+    if (sdkToken) {
+      globalThis.sdkToken = sdkToken;
+    }
   }
 
+  startHttpFeature();
+  startActionsFeature();
+});
+
+async function boot() {
   startImageFeature();
   startLogsFeature();
   startPresignedFeature();

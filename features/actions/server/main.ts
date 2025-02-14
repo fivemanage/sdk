@@ -73,7 +73,7 @@ export function startActionsFeature() {
   registerExports();
 
   // Example 1: Manage Vehicle (string, select, textarea)
-  registerAction(
+  /*registerAction(
     createAction<{
       playerID: string;
       action: "spawn" | "repair" | "delete";
@@ -138,6 +138,14 @@ export function startActionsFeature() {
                 .map((upgrade) => upgrade.trim());
               console.log(`Applying upgrades: ${upgradeList.join(", ")}`);
             }
+
+            const hash = GetHashKey(vehicleModel);
+            console.log(hash)
+            const coords = GetEntityCoords(GetPlayerPed(playerID));
+            console.log(coords)
+
+            CreateVehicle(hash, coords[0], coords[1], coords[2], 0, true, true);
+
             return { success: true, message: "Vehicle spawned successfully" };
 
           case "repair":
@@ -249,5 +257,5 @@ export function startActionsFeature() {
         return { success: true, message: "Event scheduled successfully" };
       }
     )
-  );
+  ); */
 }

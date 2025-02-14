@@ -1,5 +1,6 @@
 {
   "$schema": "./config.schema.json",
+  "useStaging": true,
   "logs": {
     "level": "info",
     "levels": ["error", "warn", "info", "debug"],
