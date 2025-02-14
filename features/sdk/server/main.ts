@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import { config } from "~/utils/common/config";
 import { convars } from "~/utils/server/convars";
 
-const API_URL = "http://christophers-macbook-pro.taile1562c.ts.net:8080/api/sdk" // config.useStaging ? "https://api.stg.fivemanage.com/api/sdk" : "https://api.fivemanage.com/api/sdk";
+const API_URL = config.useStaging ? "https://api.stg.fivemanage.com/api/sdk" : "https://api.fivemanage.com/api/sdk";
 
 export async function registerSdk(): Promise<string | undefined> {
   const endpoint = GetConvar("web_baseUrl", "");
