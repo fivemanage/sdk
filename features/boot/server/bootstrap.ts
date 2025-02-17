@@ -25,19 +25,21 @@ on("onResourceStart", async (resourceName: string) => {
   if(GetCurrentResourceName() != resourceName) return;
   
   await invalidateSDKResource()
+});
+
+async function boot() {
+  await invalidateSDKResource()
 
   if (!globalThis.sdkToken) {
     const sdkToken = await registerSdk();
     if (sdkToken) {
+      console.log("sdk token register", sdkToken)
       globalThis.sdkToken = sdkToken;
     }
   }
 
   startHttpFeature();
   startActionsFeature();
-});
-
-async function boot() {
   startImageFeature();
   startLogsFeature();
   startPresignedFeature();

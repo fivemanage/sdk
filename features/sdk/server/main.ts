@@ -7,7 +7,7 @@ const API_URL = config.useStaging ? "https://api.stg.fivemanage.com/api/sdk" : "
 export async function registerSdk(): Promise<string | undefined> {
   const endpoint = GetConvar("web_baseUrl", "");
   const resourceName = GetCurrentResourceName();
-
+  
   try {
     const initialResponse = await fetch(
       `${API_URL}/report?sdkType=fivem&endpoint=${endpoint}&resourceName=${resourceName}`,
@@ -53,8 +53,6 @@ export async function invalidateSDKResource() {
   const endpoint = GetConvar("web_baseUrl", "");
   const resourceName = GetCurrentResourceName();
 
-  console.log("endpoint meee", endpoint)
-
   try {
     const response = await fetch(
       `${API_URL}/invalidate?sdkType=fivem&endpoint=${endpoint}&resourceName=${resourceName}`,
@@ -65,9 +63,8 @@ export async function invalidateSDKResource() {
         }
       }
     );
-  
-    console.log("invalidate status", response.status)
   } catch(error) {
     console.error("Failed to invalidate token", error)
   }
 }
+
