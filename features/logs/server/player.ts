@@ -5,7 +5,7 @@ if (config.logs.playerEvents) {
 	on("playerConnecting", (name: string) => {
 		const _source = global.source;
 	
-		log("info", `Player ${name} is connecting`, {
+		log("info", `player ${name} is connecting`, {
 			playerSource: _source,
 			playerName: name,
 		})
@@ -15,7 +15,7 @@ if (config.logs.playerEvents) {
 		const _source = global.source;
 		const playerName = GetPlayerName(_source.toString())
 	
-		log("info", `Player ${playerName} dropped`, {
+		log("info", `player ${playerName} dropped`, {
 			playerSource: _source,
 			playerName,
 			reason: reason,
@@ -26,7 +26,7 @@ if (config.logs.playerEvents) {
     on("playerJoining", (source: string) => {
 		const _source = global.source;
 		const playerName = GetPlayerName(_source.toString());
-        log("info", `Player ${playerName} is joining`, {
+        log("info", `player ${playerName} is joining`, {
             playerSource: source,
             playerName,
         })

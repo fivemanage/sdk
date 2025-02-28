@@ -53,7 +53,7 @@ type WhitelistPlayer = {
 
 if (config.logs.txAdminEvents) {
     on("txAdmin:events:scheduledRestart", (data: ScheduledRestart) => {
-        log("info", `The server has been scheduled to restart in ${data.secondsRemaining} second(s)`, {
+        log("info", `server has been scheduled to restart in ${data.secondsRemaining} second(s)`, {
             event: "txAdmin:events:scheduledRestart",
             announcementMessage: data.translatedMessage,
         })
@@ -61,7 +61,7 @@ if (config.logs.txAdminEvents) {
 
     on("txAdmin:events:playerKicked", (data: PlayerKicked) => {
         const playerName = GetPlayerName(data.target.toString());
-        log("info", `Admin ${data.author} kicked ${playerName} from the server`, {
+        log("info", `admin ${data.author} kicked ${playerName} from the server`, {
             reason: data.reason ?? "No reason",
             targetSource: data.target.toString(),
             event: "txAdmin:events:playerKicked",
@@ -70,7 +70,7 @@ if (config.logs.txAdminEvents) {
     })
 
     on("txAdmin:events:playerWarned", (data: PlayerWarned) => {
-        log("info", `Player ${data.targetName} warned for: ${data.reason} by ${data.author}`, {
+        log("info", `player ${data.targetName} warned for: ${data.reason} by ${data.author}`, {
             event: "txAdmin:events:playerWarned",
             identifiers: data.targetIds,
             playerName: data.targetName,
@@ -81,7 +81,7 @@ if (config.logs.txAdminEvents) {
     })
 
     on("txAdmin:events:playerBanned", (data: PlayerBanned) => {
-        log("info", `Player ${data.targetName} banned by ${data.author}`, {
+        log("info", `player ${data.targetName} banned by ${data.author}`, {
             event: "txAdmin:events:playerBanned",
             admin: data.author,
             expiration: data.expiration,
@@ -95,7 +95,7 @@ if (config.logs.txAdminEvents) {
     })
     
     on("txAdmin:events:announcement", (data: BaseEvent) => {
-        log("info", `New announcement: ${data.message} by ${data.author}`, {
+        log("info", `new announcement: ${data.message} by ${data.author}`, {
             event: "txAdmin:events:announcement",
             admin: data.author,
             message: data.message,
@@ -103,7 +103,7 @@ if (config.logs.txAdminEvents) {
     })
 
     on("txAdmin:events:serverShuttingDown", (data: BaseEvent) => {
-        log("info", `Server is shutting down`, {
+        log("info", `server is shutting down`, {
             event: "txAdmin:events:serverShuttingDown",
             admin: data.author,
             message: data.message,
@@ -112,7 +112,7 @@ if (config.logs.txAdminEvents) {
 
     on("txAdmin:events:playerDirectMessage", (data: PlayerDirectMessage) => {
         const playerName = GetPlayerName(data.target.toString())
-        log("info", `Direct message sent to ${playerName} from ${data.author}`, {
+        log("info", `direct message sent to ${playerName} from ${data.author}`, {
             event: "txAdmin:events:playerDirectMessage",
             targetSource: data.target.toString(),
             admin: data.author,
@@ -121,7 +121,7 @@ if (config.logs.txAdminEvents) {
     })
 
     on ("txAdmin:events:whitelistPlayer", (data: WhitelistPlayer) => {
-        log("info", `Whitelist for player ${data.playerName} was ${data.action}`, {
+        log("info", `whitelist for player ${data.playerName} was ${data.action}`, {
             event: "txAdmin:events:whitelistPlayer",
             adminName: data.adminName,
             action: data.action,

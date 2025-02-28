@@ -1,20 +1,76 @@
 // WIP
 
 import { config } from "~/utils/common/config";
+import { log } from "./logger";
+
+interface DeathData {
+    killervehseat: number;
+    weaponhash: number;
+    killervehname: string;
+    killertype: number;
+    killerpos: number[]
+    killerinveh: boolean;
+}
+
+interface FormattedDeathData {
+    killerVehicleSeat: number;
+    weaponHash: number;
+    killerVehicleName: string;
+    killerType: number;
+    killerPosition: number[]
+    killerInVehicle: boolean;
+}
+
+enum PedType {
+    Michael = 0,
+    Franklin = 1,
+    Trevor = 2,
+    Army = 29,
+    Animal = 28,
+    Swat = 27,
+    LSFD = 21,
+    Paramedic = 20,
+    Cop = 6,
+    Male = 4,
+    Female = 5,
+    Human = 26
+}
 
 if (config.logs.baseEvents) {
     onNet("baseevents:onPlayerDied", (killerType: number, deathCoords: string[]) => {
-        console.log("baseevents:onPlayerDied")
-        console.log(killerType, deathCoords)
+        const _source = global.source
+        const playerName = GetPlayerName(_source.toString())
+
+        log('info', `player ${playerName} died`, {
+            playerSource: _source,
+            playerName,
+            killerType,
+            deathCoords
+        })
     })
 
-    on("baseevents:onPlayerKilled", (killerId: number, deathData: any) => {
-        console.log("baseevents:onPlayerKilled")
-        console.log(killerId, deathData)
-    })
+    onNet("baseevents:onPlayerKilled", (killerId: number, deathData: DeathData) => {
+        const _source = global.source
+        const playerName = GetPlayerName(_source.toString())
+        const killerName = GetPlayerName(killerId.toString())
 
-    on("baseevents:onPlayerWasted", (deathCoords: any) => {
-        console.log("baseevents:onPlayerWasted")
-        console.log(deathCoords)
+        const formattedData: FormattedDeathData = {
+            killerVehicleSeat: deathData.killervehseat,
+            weaponHash: deathData.weaponhash,
+            killerVehicleName: deathData.killervehname,
+            killerType: deathData.killertype,
+            killerPosition: deathData.killerpos,
+            killerInVehicle: deathData.killerinveh
+        }
+
+        log('info', `player ${playerName} killed`, {
+            playerSource: _source,
+            playerName,
+            killer: {
+                id: killerId,
+                playerName: killerName ?? PedType[formattedData.killerType],
+            },
+            deathData: formattedData,
+        })
     })
 }
