@@ -129,8 +129,40 @@ function registerRPCListeners() {
 	);
 }
 
+async function uploadFile(buffer: ArrayBuffer, options: { metadata?: Record<string, unknown>, fileName?: string } = {}) {
+	try {
+		const form = new FormData();
+		form.append("file", buffer);
+
+		if (options.metadata) {
+			form.append("metadata", JSON.stringify(options.metadata));
+		}
+
+		if (options.fileName) {
+			form.append("filename", options.fileName);
+		}
+
+		const res = await fetch(apiUrl, {
+			method: "POST",
+			body: form,
+			headers: {
+				Authorization: convars.FIVEMANAGE_MEDIA_API_KEY,
+			},
+		});
+
+		if (res.ok === false) {
+			throw new Error("Failed to upload image to Fivemanage");
+		}
+
+		return await res.json()
+	} catch(err) {
+		console.error(err);
+	}
+}
+
 function registerExports() {
 	exports("takeServerImage", requestClientScreenshot);
+	exports("uploadImage", uploadFile);
 }
 
 export function startImageFeature() {
