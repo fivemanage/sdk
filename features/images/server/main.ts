@@ -131,18 +131,20 @@ function registerRPCListeners() {
 
 async function uploadFile(buffer: ArrayBuffer, options: { metadata?: Record<string, unknown>, fileName?: string } = {}) {
 	try {
+		const nodeBuffer = Buffer.from(buffer);
+
 		const form = new FormData();
-		form.append("file", buffer);
+		form.append("file", nodeBuffer, 'file.png');
 
 		if (options.metadata) {
 			form.append("metadata", JSON.stringify(options.metadata));
 		}
-
+		
 		if (options.fileName) {
 			form.append("filename", options.fileName);
 		}
 
-		const res = await fetch(apiUrl, {
+		const res = await fetch(apiUrl, {	
 			method: "POST",
 			body: form,
 			headers: {
@@ -151,6 +153,11 @@ async function uploadFile(buffer: ArrayBuffer, options: { metadata?: Record<stri
 		});
 
 		if (res.ok === false) {
+			console.log(res.status)
+			console.log(res.statusText)
+
+			const data = await res.json();
+			console.log(data)
 			throw new Error("Failed to upload image to Fivemanage");
 		}
 
