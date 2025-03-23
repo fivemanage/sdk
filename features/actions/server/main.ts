@@ -19,12 +19,13 @@ export const ActionInputSchema = z.object({
   name: z.string(),
   type: InputType,
   required: z.boolean(),
-  description: z.string(),
+  description: z.string().optional(),
   options: z.array(z.string()).optional(),
   min: z.number().optional(),
   max: z.number().optional(),
   step: z.number().optional(),
 });
+
 export type ActionInput = z.infer<typeof ActionInputSchema>;
 
 // Define the schema for actions
@@ -54,14 +55,26 @@ function createAction<T extends Record<string, any>>(
 
 // Function to register an action
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-function registerAction<T extends Record<string, any>>(action: Action<T>) {
+function registerAction<T extends Record<string, any>>(
+  actionName: string, 
+  description: string, 
+  inputSchema: ActionInput[], 
+  callback: ActionFunction<T>,
+) {
   const actionId = v4();
   try {
+    const action: Action<T> = {
+      name: actionName,
+      description,
+      inputSchema,
+      fn: callback,
+    }
+
     ActionSchema.parse(action);
     globalThis.actions[actionId] = action;
-    console.log(`Registered action: ${action.name} with ID: ${actionId}`);
+    console.log(`Registered action: ${actionName} with ID: ${actionId}`);
   } catch (error) {
-    console.error(`Failed to register action ${action.name}:`, error);
+    console.error(`Failed to register action ${actionName}:`, error);
   }
 }
 
