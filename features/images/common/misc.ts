@@ -1,3 +1,7 @@
 export type ImageUploadResponse = {
-	url: string;
+  status: string;
+  data: {
+    id: string;
+    url: string;
+  };
 };
