@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@fivemanage/winston':
-    specifier: ^0.3.2
-    version: 0.3.2
+    specifier: ^0.3.3
+    version: 0.3.3
   '@paralleldrive/cuid2':
     specifier: ^2.2.2
     version: 2.2.2
@@ -374,8 +374,8 @@ packages:
     dev: true
     optional: true
 
-  /@fivemanage/winston@0.3.2:
-    resolution: {integrity: sha512-XNQXjw0ueWluoq7VBo4u3Lzl6Kf1eeGFkI9+EmNhkiLL3c4y4IhlISIFM2zMT3uI3feBGoiZvl1EB4V3Jq/kWw==}
+  /@fivemanage/winston@0.3.3:
+    resolution: {integrity: sha512-w6rcpZGsHl08jI9SowC+LWIRKt9xakSBbWtLVLb70Ut4s/RaLqecvsUeWsXliE/WPnL7ojmikUvgM9oDf2u9cA==}
     dependencies:
       node-fetch: 2.7.0
       winston-transport: 4.7.0
