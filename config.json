@@ -7,9 +7,9 @@
 		"enableCloudLogging": true,
 		"appendPlayerIdentifiers": true,
 		"excludedPlayerIdentifiers": ["ip"],
-		"playerEvents": true,
-		"chatEvents": true,
-		"baseEvents": true,
+		"playerEvents": false,
+		"chatEvents": false,
+		"baseEvents": false,
 		"txAdminEvents": false
 	}
 }
