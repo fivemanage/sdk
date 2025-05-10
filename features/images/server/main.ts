@@ -14,7 +14,7 @@ import {
 } from "valibot";
 import type { ImageUploadResponse } from "~/images/common/misc";
 import { getErrorMessage } from "~/utils/common/misc";
-import { convars } from "~/utils/server/convars";
+import { loadMediaConvar } from "~/utils/server/convars";
 import { registerRPCListener } from "~/utils/server/rpc";
 
 const apiUrl = "https://fmapi.net/api/v2/image";
@@ -51,7 +51,7 @@ async function uploadImage(
       method: "POST",
       body: form,
       headers: {
-        Authorization: convars.FIVEMANAGE_MEDIA_API_KEY,
+        Authorization: loadMediaConvar(),
       },
     });
 
@@ -153,7 +153,7 @@ async function uploadFile(
       method: "POST",
       body: form,
       headers: {
-        Authorization: convars.FIVEMANAGE_MEDIA_API_KEY,
+        Authorization: loadMediaConvar(),
       },
     });
 

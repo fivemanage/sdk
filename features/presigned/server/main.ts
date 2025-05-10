@@ -1,5 +1,5 @@
 import { object, parse, string, url, picklist } from "valibot";
-import { convars } from "~/utils/server/convars";
+import { loadMediaConvar } from "~/utils/server/convars";
 import fetch from "node-fetch";
 
 const API_URL = "https://fmapi.net/api/v2/presigned-url";
@@ -34,7 +34,7 @@ async function requestPresignedUrl(
   const res = await fetch(`${API_URL}?fileType=${parsedFileType}`, {
     method: "GET",
     headers: {
-      Authorization: convars.FIVEMANAGE_MEDIA_API_KEY,
+      Authorization: loadMediaConvar()
     },
   });
 

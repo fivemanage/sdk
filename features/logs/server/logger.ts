@@ -13,7 +13,7 @@ import {
 	ValiError,
 	flatten,
 } from "valibot";
-import { convars } from "~/utils/server/convars";
+import { loadLogsConvar } from "~/utils/server/convars";
 
 import './player'
 import './chat';
@@ -40,8 +40,7 @@ if (config.logs.console === true) {
 			format.timestamp(),
 			format.printf(
 				(info) =>
-					`[^3${info.timestamp}^7] [^5${info.resource}^7] [${
-						LogColor[info.level as keyof typeof LogColor] ?? "^7"
+					`[^3${info.timestamp}^7] [^5${info.resource}^7] [${LogColor[info.level as keyof typeof LogColor] ?? "^7"
 					}${info.level.toUpperCase()}^7]: ${info.message}`,
 			),
 		),
@@ -53,7 +52,7 @@ if (config.logs.console === true) {
 if (config.logs.enableCloudLogging === true) {
 	logger.add(
 		new FivemanageTransport({
-			apiKey: convars.FIVEMANAGE_LOGS_API_KEY,
+			apiKey: loadLogsConvar()
 		}),
 	);
 }
@@ -91,6 +90,7 @@ export function log(level: string, message: string, metadata: LogMetadata = {}, 
 		logger.log(level, message, {
 			resource: _internalOpts?._internal_RESOURCE ?? meta._resourceName,
 			metadata: meta,
+			datasetId: "default",
 		});
 	} catch (error) {
 		if (error instanceof ValiError) {
@@ -106,8 +106,68 @@ export function log(level: string, message: string, metadata: LogMetadata = {}, 
 	}
 }
 
+// this new function is used to ingest logs to a specific dataset
+export function ingest(datasetId: string, level: string, message: string, metadata: LogMetadata = {}, _internalOpts?: _InternalOptions) {
+	try {
+		parse(LogSchema, { level, message, metadata });
+
+		const meta: LogMetadata = {
+			...metadata,
+			_resourceName: GetInvokingResource(),
+			_serverSessionId: globalThis.serverSessionId,
+		};
+
+		if (config.logs.appendPlayerIdentifiers) {
+			if (meta.playerSource) {
+				meta._playerIdentifiers = getFormattedPlayerIdentifiers(
+					meta.playerSource,
+				);
+			}
+
+			if (meta.targetSource) {
+				meta._targetIdentifiers = getFormattedPlayerIdentifiers(
+					meta.targetSource,
+				);
+			}
+		}
+
+		logger.log(level, message, {
+			resource: _internalOpts?._internal_RESOURCE ?? meta._resourceName,
+			metadata: meta,
+			datasetId: datasetId,
+		});
+	} catch (error) {
+		if (error instanceof ValiError) {
+			console.error(
+				"Invalid log params:\n",
+				flatten<typeof LogSchema>(error).nested,
+			);
+
+			return;
+		}
+
+		console.error("Error executing log", error);
+	}
+}
+
+export function info(datasetId: string, message: string, metadata: LogMetadata = {}, _internalOpts?: _InternalOptions) {
+	ingest(datasetId, "info", message, metadata, _internalOpts);
+}
+
+export function warn(datasetId: string, message: string, metadata: LogMetadata = {}, _internalOpts?: _InternalOptions) {
+	ingest(datasetId, "warn", message, metadata, _internalOpts);
+}
+
+export function error(datasetId: string, message: string, metadata: LogMetadata = {}, _internalOpts?: _InternalOptions) {
+	ingest(datasetId, "error", message, metadata, _internalOpts);
+}
+
 function registerExports() {
 	exports("LogMessage", log);
+	exports("Log", ingest);
+	exports("Info", info);
+	exports("Warn", warn);
+	exports("Error", error);
 }
 
 export function startLogsFeature() {

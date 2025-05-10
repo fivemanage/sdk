@@ -29,7 +29,7 @@ This sdk simplifies interaction with our public API for FiveM server developers,
      ensure screenshot-basic  # Only add this line if `screenshot-basic` is not already ensured in your configuration.
      ensure fmsdk    # The SDK must be started after the `screenshot-basic` resource.
      ```
-   - Add the following ConVars to your `server.cfg` for API authentication:
+   - Add the following ConVars to your `server.cfg` for API authentication depending on what you're using the sdk for. Both are not required at the same time.
      ```
      set FIVEMANAGE_MEDIA_API_KEY your_api_key
      set FIVEMANAGE_LOGS_API_KEY your_api_key
@@ -170,37 +170,72 @@ Examples are provided in both Lua and JavaScript. TypeScript developers can refe
 - **"chatEvents"**: Enable chat events. (this might cause a lot of logs)
 - **"txAdminEvents"**: Enable txAdmin events.
 
+
+### Datsets
+The first argumment of `fmsdk:Log` is the dataset you wish to ingest logs to. This is simply the name of the dataset, as you named it in the Fivemanage dashboard.
+
 ### **Server Exports**
 
 **Function Definition:**
 
 ```typescript
-LogMessage(level: string, message: string, metadata?: { playerSource?: string | number, targetSource?: string | number, [key: string]: unknown }): void
+Log(datasetId: string, level: string, message: string, metadata?: { playerSource?: string | number, targetSource?: string | number, [key: string]: unknown }): void
 ```
 
 **Lua Example:**
 
 ```lua
-exports.fmsdk:LogMessage("info", "Player connected", {
+exports.fmsdk:Log("default", "info", "Player connected", {
     playerSource = source,
     customData = "Additional info"
 })
 
 -- Without metadata
-exports.fmsdk:LogMessage("error", "An error occurred")
+exports.fmsdk:Log("default", "error", "An error occurred")
 ```
 
 **JavaScript Example:**
 
 ```javascript
-exports.fmsdk.LogMessage("info", "Player connected", {
+exports.fmsdk.Log("default", "info", "Player connected", {
   playerSource: player.id,
   customData: "Additional info"
 });
 
 // Without metadata
-exports.fmsdk.LogMessage("error", "An error occurred");
+exports.fmsdk.Log("default", "error", "An error occurred");
 ```
+
+You can also use a couple shorthands, if you don't wish to set the level all the time.
+
+```typescript
+Info(datasetId: string, message: string, metadata?: { playerSource?: string | number, targetSource?: string | number, [key: string]: unknown }): void
+
+Error(datasetId: string, message: string, metadata?: { playerSource?: string | number, targetSource?: string | number, [key: string]: unknown }): void
+
+Warn(datasetId: string, message: string, metadata?: { playerSource?: string | number, targetSource?: string | number, [key: string]: unknown }): void
+```
+
+```lua
+exports.fmsdk:Info()
+exports.fmsdk:Error()
+export.fmsdk:Warn()
+```
+
+**Dataset example**:'
+The first argument is alwasy the datasetId, otherwise known a the `name` of the dataset.
+
+This log would go to the dataset which is called `bank`. 
+```lua
+exports.fmsdk:Log("bank", "info", "Someone transferred money")
+```
+
+And this, would go to your `default` dataset.
+```lua
+exports.fmsdk:Log("default", "info", "Someone happened on the server.")
+```
+
+If you keep using the export: `fmsdk:LogMessage`, all logs will go the `default` dataset.
 
 ## Community & Support
 
