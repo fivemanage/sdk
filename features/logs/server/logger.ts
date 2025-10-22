@@ -69,8 +69,7 @@ export function log(level: string, message: string, metadata: LogMetadata = {}, 
 
 		const meta: LogMetadata = {
 			...metadata,
-			_resourceName: GetInvokingResource(),
-			_serverSessionId: globalThis.serverSessionId,
+			serverSessionId: config.logs.excludeInDepthMetadata ? null : globalThis.serverSessionId,
 		};
 
 		if (config.logs.appendPlayerIdentifiers) {
@@ -87,8 +86,14 @@ export function log(level: string, message: string, metadata: LogMetadata = {}, 
 			}
 		}
 
+		let resourceName = GetInvokingResource();
+		if (!resourceName) {
+			resourceName = "Unknown Resource";
+			console.warn("Could not identify the invoking resource for this log message. This usually happens when the log export is called from a cross-network event (e.g., Server ↔ Client). This will NOT affect the log, however it will just show the resource as 'Unknown Resource'.");
+		}
+
 		logger.log(level, message, {
-			resource: _internalOpts?._internal_RESOURCE ?? meta._resourceName,
+			resource: _internalOpts?._internal_RESOURCE ?? resourceName,
 			metadata: meta,
 			datasetId: "default",
 		});

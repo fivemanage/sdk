@@ -60,6 +60,11 @@
 					},
 					"default": []
 				},
+				"excludeInDepthMetadata": {
+					"description": "Remove in-depth metadata such as server session ID from logs.",
+					"type": "boolean",
+					"default": false
+				},
 				"playerEvents": {
 					"description": "Enable player events like connecting and dropped.",
 					"type": "boolean",
