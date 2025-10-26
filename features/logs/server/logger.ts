@@ -63,91 +63,60 @@ const LogSchema = object({
 	metadata: record(unknown()),
 });
 
-export function log(level: string, message: string, metadata: LogMetadata = {}, _internalOpts?: _InternalOptions) {
+function processMetadata(metadata: LogMetadata): LogMetadata {
+	const meta: LogMetadata = { ...metadata };
+
+	if (config.logs.appendPlayerIdentifiers) {
+		if (meta.playerSource) {
+			meta._playerIdentifiers = getFormattedPlayerIdentifiers(meta.playerSource);
+		}
+		if (meta.targetSource) {
+			meta._targetIdentifiers = getFormattedPlayerIdentifiers(meta.targetSource);
+		}
+	}
+
+	return meta;
+}
+
+function executeLog(level: string, message: string, metadata: LogMetadata, datasetId: string, _internalOpts?: _InternalOptions) {
 	try {
 		parse(LogSchema, { level, message, metadata });
 
-		const meta: LogMetadata = {
-			...metadata,
-			_resourceName: GetInvokingResource(),
-			_serverSessionId: globalThis.serverSessionId,
-		};
+		const meta = processMetadata(metadata);
+		const resourceName = GetInvokingResource() || "Unknown Resource";
 
-		if (config.logs.appendPlayerIdentifiers) {
-			if (meta.playerSource) {
-				meta._playerIdentifiers = getFormattedPlayerIdentifiers(
-					meta.playerSource,
-				);
-			}
-
-			if (meta.targetSource) {
-				meta._targetIdentifiers = getFormattedPlayerIdentifiers(
-					meta.targetSource,
-				);
-			}
+		if (!GetInvokingResource()) {
+			console.warn("Could not identify the invoking resource for this log message. This usually happens when the log export is called from a cross-network event (e.g., Server ↔ Client). This will NOT affect the log, however it will just show the resource as 'Unknown Resource'.");
 		}
 
 		logger.log(level, message, {
-			resource: _internalOpts?._internal_RESOURCE ?? meta._resourceName,
+			resource: _internalOpts?._internal_RESOURCE ?? resourceName,
 			metadata: meta,
-			datasetId: "default",
+			datasetId,
 		});
 	} catch (error) {
 		if (error instanceof ValiError) {
-			console.error(
-				"Invalid log params:\n",
-				flatten<typeof LogSchema>(error).nested,
-			);
-
+			console.error("Invalid log params:\n", flatten<typeof LogSchema>(error).nested);
 			return;
 		}
-
 		console.error("Error executing log", error);
 	}
 }
 
-// this new function is used to ingest logs to a specific dataset
+export function log(level: string, message: string, metadata: LogMetadata = {}, _internalOpts?: _InternalOptions) {
+	const meta = {
+		...metadata,
+		serverSessionId: config.logs.excludeInDepthMetadata ? null : globalThis.serverSessionId,
+	};
+	executeLog(level, message, meta, "default", _internalOpts);
+}
+
 export function ingest(datasetId: string, level: string, message: string, metadata: LogMetadata = {}, _internalOpts?: _InternalOptions) {
-	try {
-		parse(LogSchema, { level, message, metadata });
-
-		const meta: LogMetadata = {
-			...metadata,
-			_resourceName: GetInvokingResource(),
-			_serverSessionId: globalThis.serverSessionId,
-		};
-
-		if (config.logs.appendPlayerIdentifiers) {
-			if (meta.playerSource) {
-				meta._playerIdentifiers = getFormattedPlayerIdentifiers(
-					meta.playerSource,
-				);
-			}
-
-			if (meta.targetSource) {
-				meta._targetIdentifiers = getFormattedPlayerIdentifiers(
-					meta.targetSource,
-				);
-			}
-		}
-
-		logger.log(level, message, {
-			resource: _internalOpts?._internal_RESOURCE ?? meta._resourceName,
-			metadata: meta,
-			datasetId: datasetId,
-		});
-	} catch (error) {
-		if (error instanceof ValiError) {
-			console.error(
-				"Invalid log params:\n",
-				flatten<typeof LogSchema>(error).nested,
-			);
-
-			return;
-		}
-
-		console.error("Error executing log", error);
-	}
+	const meta = {
+		...metadata,
+		serverSessionId: config.logs.excludeInDepthMetadata ? null : globalThis.serverSessionId,
+	};
+	executeLog(level, message, meta, datasetId, _internalOpts);
 }
 
 export function info(datasetId: string, message: string, metadata: LogMetadata = {}, _internalOpts?: _InternalOptions) {
