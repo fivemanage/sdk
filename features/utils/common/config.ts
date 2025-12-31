@@ -10,6 +10,11 @@ import {
 	parse,
 } from "valibot";
 
+const EventConfigSchema = object({
+	enabled: boolean(),
+	dataset: string([minLength(1)]),
+});
+
 const ConfigSchema = object({
 	logs: object({
 		level: string([minLength(1)]),
@@ -19,10 +24,11 @@ const ConfigSchema = object({
 		appendPlayerIdentifiers: boolean(),
 		excludedPlayerIdentifiers: array(string([minLength(1)])),
 		excludeInDepthMetadata: boolean(),
-		playerEvents: boolean(),
-		baseEvents: boolean(),
-		chatEvents: boolean(),
-		txAdminEvents: boolean(),
+		playerEvents: EventConfigSchema,
+		baseEvents: EventConfigSchema,
+		chatEvents: EventConfigSchema,
+		txAdminEvents: EventConfigSchema,
+		oxInventoryEvents: EventConfigSchema,
 	}),
 });
 

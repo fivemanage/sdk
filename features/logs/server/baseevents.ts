@@ -1,7 +1,7 @@
 // WIP
 
 import { config } from "~/utils/common/config";
-import { log } from "./logger";
+import { ingest } from "./logger";
 
 interface DeathData {
     killervehseat: number;
@@ -36,12 +36,14 @@ enum PedType {
     Human = 26
 }
 
-if (config.logs.baseEvents) {
+if (config.logs.baseEvents.enabled) {
+    const dataset = config.logs.baseEvents.dataset;
+
     onNet("baseevents:onPlayerDied", (killerType: number, deathCoords: string[]) => {
         const _source = global.source
         const playerName = GetPlayerName(_source.toString())
 
-        log('info', `player ${playerName} died`, {
+        ingest(dataset, 'info', `player ${playerName} died`, {
             playerSource: _source,
             playerName,
             killerType,
@@ -63,7 +65,7 @@ if (config.logs.baseEvents) {
             killerInVehicle: deathData.killerinveh
         }
 
-        log('info', `player ${playerName} killed`, {
+        ingest(dataset, 'info', `player ${playerName} killed`, {
             playerSource: _source,
             playerName,
             killer: {

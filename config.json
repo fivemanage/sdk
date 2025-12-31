@@ -8,9 +8,25 @@
 		"appendPlayerIdentifiers": true,
 		"excludedPlayerIdentifiers": ["ip"],
 		"excludeInDepthMetadata": false,
-		"playerEvents": false,
-		"chatEvents": false,
-		"baseEvents": false,
-		"txAdminEvents": false
+		"playerEvents": {
+			"enabled": false,
+			"dataset": "default"
+		},
+		"chatEvents": {
+			"enabled": false,
+			"dataset": "default"
+		},
+		"baseEvents": {
+			"enabled": false,
+			"dataset": "default"
+		},
+		"txAdminEvents": {
+			"enabled": false,
+			"dataset": "default"
+		},
+		"oxInventoryEvents": {
+			"enabled": true,
+			"dataset": "default"
+		}
 	}
 }

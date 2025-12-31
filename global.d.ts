@@ -1,4 +1,15 @@
 declare global {
+	interface OxInventoryExports {
+		registerHook: (
+			event: string,
+			callback: (data: Record<string, unknown>) => void,
+		) => void;
+	}
+
+	interface CitizenExports {
+		ox_inventory: OxInventoryExports;
+	}
+
 	type Enum<T extends object> = T[keyof T];
 
 	type RPCResponse<T = undefined> =

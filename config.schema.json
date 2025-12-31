@@ -65,21 +65,74 @@
 					"type": "boolean",
 					"default": false
 				},
-				"playerEvents": {
-					"description": "Enable player events like connecting and dropped.",
-					"type": "boolean",
-					"default": true
+			"playerEvents": {
+				"description": "Player events like connecting and dropped.",
+				"type": "object",
+				"properties": {
+					"enabled": {
+						"description": "Enable player events.",
+						"type": "boolean",
+						"default": true
+					},
+					"dataset": {
+						"description": "Dataset to use for player events.",
+						"type": "string",
+						"default": "default"
+					}
 				},
-				"chatEvents": {
-					"description": "Enable chat events.",
-					"type": "boolean",
-					"default": true
+				"default": { "enabled": true, "dataset": "default" }
+			},
+			"chatEvents": {
+				"description": "Chat events configuration.",
+				"type": "object",
+				"properties": {
+					"enabled": {
+						"description": "Enable chat events.",
+						"type": "boolean",
+						"default": true
+					},
+					"dataset": {
+						"description": "Dataset to use for chat events.",
+						"type": "string",
+						"default": "default"
+					}
 				},
-				"txAdminEvents": {
-					"description": "Enable txAdmin events to be logged.",
-					"type": "boolean",
-					"default": false
-				}
+				"default": { "enabled": true, "dataset": "default" }
+			},
+			"txAdminEvents": {
+				"description": "txAdmin events configuration.",
+				"type": "object",
+				"properties": {
+					"enabled": {
+						"description": "Enable txAdmin events to be logged.",
+						"type": "boolean",
+						"default": false
+					},
+					"dataset": {
+						"description": "Dataset to use for txAdmin events.",
+						"type": "string",
+						"default": "default"
+					}
+				},
+				"default": { "enabled": false, "dataset": "default" }
+			},
+			"oxInventoryEvents": {
+				"description": "ox_inventory events configuration.",
+				"type": "object",
+				"properties": {
+					"enabled": {
+						"description": "Enable ox_inventory events to be logged.",
+						"type": "boolean",
+						"default": false
+					},
+					"dataset": {
+						"description": "Dataset to use for ox_inventory events.",
+						"type": "string",
+						"default": "default"
+					}
+				},
+				"default": { "enabled": false, "dataset": "default" }
+			}
 			},
 			"required": [
 				"level",
@@ -90,7 +143,8 @@
 				"excludedPlayerIdentifiers",
 				"playerEvents",
 				"chatEvents",
-				"txAdminEvents"
+				"txAdminEvents",
+				"oxInventoryEvents"
 			]
 		}
 	},

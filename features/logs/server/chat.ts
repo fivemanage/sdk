@@ -1,9 +1,11 @@
 import { config } from "~/utils/common/config";
-import { log } from "./logger";
+import { ingest } from "./logger";
 
-if (config.logs.chatEvents) {
+if (config.logs.chatEvents.enabled) {
+    const dataset = config.logs.chatEvents.dataset;
+
     onNet('chatMessage', (src: number, playerName: string, content: string)=>{
-        log("info", `chat message from ${playerName}`, {
+        ingest(dataset, "info", `chat message from ${playerName}`, {
             playerSource: src,
             chatMessage: content,
             playerName: playerName,
