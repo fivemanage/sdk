@@ -19,6 +19,7 @@ import './player'
 import './chat';
 import './txadmin'
 import './baseevents'
+import './third-party/ox-inventory'
 
 const levels = config.logs.levels.reduce<Record<string, number>>(
 	(acc, curr, idx) => {
