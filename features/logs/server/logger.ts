@@ -139,9 +139,3 @@ function registerExports() {
 export function startLogsFeature() {
 	registerExports();
 }
-
-RegisterCommand("fmlogs2", () => {
-	ingest("default", "info", "This is a test log", {
-		yourMom: "is a fatass"
-	});
-}, false);
