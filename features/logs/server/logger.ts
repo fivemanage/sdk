@@ -84,11 +84,7 @@ function executeLog(level: string, message: string, metadata: LogMetadata, datas
 		parse(LogSchema, { level, message, metadata });
 
 		const meta = processMetadata(metadata);
-		const resourceName = GetInvokingResource() || "Unknown Resource";
-
-		if (!GetInvokingResource()) {
-			console.warn("Could not identify the invoking resource for this log message. This usually happens when the log export is called from a cross-network event (e.g., Server ↔ Client). This will NOT affect the log, however it will just show the resource as 'Unknown Resource'.");
-		}
+		const resourceName = GetInvokingResource() || "fmsdk";
 
 		logger.log(level, message, {
 			resource: _internalOpts?._internal_RESOURCE ?? resourceName,
@@ -143,3 +139,9 @@ function registerExports() {
 export function startLogsFeature() {
 	registerExports();
 }
+
+RegisterCommand("fmlogs2", () => {
+	ingest("default", "info", "This is a test log", {
+		yourMom: "is a fatass"
+	});
+}, false);
