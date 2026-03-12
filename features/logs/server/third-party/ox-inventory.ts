@@ -70,7 +70,8 @@ if (config.logs.oxInventoryEvents.enabled) {
             itemName: data.itemName,
             totalPrice: data.totalPrice,
             metadata: data.metadata,
-            resource: "ox_inventory"
+        }, {
+            _internal_RESOURCE: "ox_inventory"
         })
     })
 
@@ -103,7 +104,8 @@ if (config.logs.oxInventoryEvents.enabled) {
             toInventory: toInventory,
             toPlayerName: toPlayerName,
             fromType: data.fromType,
-            resource: "ox_inventory"
+        }, {
+            _internal_RESOURCE: "ox_inventory"
         })
     })
 
