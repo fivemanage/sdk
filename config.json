@@ -27,6 +27,10 @@
 		"oxInventoryEvents": {
 			"enabled": true,
 			"dataset": "default"
+		},
+		"qbxBankrobberyEvents": {
+			"enabled": false,
+			"dataset": "default"
 		}
 	}
 }
