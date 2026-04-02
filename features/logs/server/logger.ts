@@ -20,6 +20,7 @@ import './chat';
 import './txadmin'
 import './baseevents'
 import './third-party/ox-inventory'
+import './third-party/qbx-core'
 
 const levels = config.logs.levels.reduce<Record<string, number>>(
 	(acc, curr, idx) => {
