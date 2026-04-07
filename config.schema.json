@@ -132,6 +132,23 @@
 					}
 				},
 				"default": { "enabled": false, "dataset": "default" }
+			},
+			"esxCoreEvents": {
+				"description": "ESX core (es_extended) events configuration.",
+				"type": "object",
+				"properties": {
+					"enabled": {
+						"description": "Enable ESX core events to be logged.",
+						"type": "boolean",
+						"default": false
+					},
+					"dataset": {
+						"description": "Dataset to use for ESX core events.",
+						"type": "string",
+						"default": "default"
+					}
+				},
+				"default": { "enabled": false, "dataset": "default" }
 			}
 			},
 			"required": [
@@ -144,7 +161,8 @@
 				"playerEvents",
 				"chatEvents",
 				"txAdminEvents",
-				"oxInventoryEvents"
+				"oxInventoryEvents",
+				"esxCoreEvents"
 			]
 		}
 	},
