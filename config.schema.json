@@ -132,6 +132,23 @@
 					}
 				},
 				"default": { "enabled": false, "dataset": "default" }
+			},
+			"esxWorldEvents": {
+				"description": "ESX world events configuration (garage, property, drugs, license, identity, ambulance).",
+				"type": "object",
+				"properties": {
+					"enabled": {
+						"description": "Enable ESX world events to be logged.",
+						"type": "boolean",
+						"default": false
+					},
+					"dataset": {
+						"description": "Dataset to use for ESX world events.",
+						"type": "string",
+						"default": "default"
+					}
+				},
+				"default": { "enabled": false, "dataset": "default" }
 			}
 			},
 			"required": [
@@ -144,7 +161,8 @@
 				"playerEvents",
 				"chatEvents",
 				"txAdminEvents",
-				"oxInventoryEvents"
+				"oxInventoryEvents",
+				"esxWorldEvents"
 			]
 		}
 	},
