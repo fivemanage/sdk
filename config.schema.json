@@ -132,6 +132,23 @@
 					}
 				},
 				"default": { "enabled": false, "dataset": "default" }
+			},
+			"esxPoliceEvents": {
+				"description": "ESX police job events configuration.",
+				"type": "object",
+				"properties": {
+					"enabled": {
+						"description": "Enable ESX police job events to be logged.",
+						"type": "boolean",
+						"default": false
+					},
+					"dataset": {
+						"description": "Dataset to use for ESX police job events.",
+						"type": "string",
+						"default": "default"
+					}
+				},
+				"default": { "enabled": false, "dataset": "default" }
 			}
 			},
 			"required": [
@@ -144,7 +161,8 @@
 				"playerEvents",
 				"chatEvents",
 				"txAdminEvents",
-				"oxInventoryEvents"
+				"oxInventoryEvents",
+				"esxPoliceEvents"
 			]
 		}
 	},
