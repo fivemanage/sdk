@@ -25,7 +25,7 @@
 			"dataset": "default"
 		},
 		"oxInventoryEvents": {
-			"enabled": true,
+			"enabled": false,
 			"dataset": "default"
 		}
 	}

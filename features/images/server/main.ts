@@ -1,5 +1,3 @@
-import FormData from "form-data";
-import fetch from "node-fetch";
 import {
   url,
   minLength,
@@ -17,7 +15,7 @@ import { getErrorMessage } from "~/utils/common/misc";
 import { loadMediaConvar } from "~/utils/server/convars";
 import { registerRPCListener } from "~/utils/server/rpc";
 
-const apiUrl = "https://fmapi.net/api/v2/image";
+const apiUrl = "https://api.fivemanage.com/api/v3/file";
 
 const ImageUploadResponseSchema = object(
   {
@@ -42,7 +40,7 @@ async function uploadImage(
     const base64String = data.split(",")[1] ?? "";
     const buffer = Buffer.from(base64String, "base64");
 
-    form.append("image", buffer, "image.png");
+    form.append("file", new Blob([new Uint8Array(buffer)]), "image.png");
     if (metadata) {
       form.append("metadata", JSON.stringify(metadata));
     }
@@ -136,10 +134,8 @@ async function uploadFile(
   options: { metadata?: Record<string, unknown>; fileName?: string } = {},
 ) {
   try {
-    const nodeBuffer = Buffer.from(buffer);
-
     const form = new FormData();
-    form.append("file", nodeBuffer, "file.png");
+    form.append("file", new Blob([new Uint8Array(buffer)]), "file.png");
 
     if (options.metadata) {
       form.append("metadata", JSON.stringify(options.metadata));

@@ -1,6 +1,5 @@
 import { object, parse, string, url, picklist } from "valibot";
 import { loadMediaConvar } from "~/utils/server/convars";
-import fetch from "node-fetch";
 
 const API_URL = "https://fmapi.net/api/v2/presigned-url";
 

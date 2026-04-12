@@ -12,7 +12,7 @@
 		"@citizenfx/client": "2.0.7290-1",
 		"@citizenfx/server": "2.0.7290-1",
 		"@types/node": "^20.11.19",
-		"@types/node-fetch": "2",
+
 		"colorette": "^2.0.20",
 		"esbuild": "^0.20.1",
 		"rcon": "^1.1.0",
@@ -21,9 +21,7 @@
 	"dependencies": {
 		"@fivemanage/winston": "^0.3.3",
 		"@paralleldrive/cuid2": "^2.2.2",
-		"form-data": "^4.0.0",
 		"lru-cache": "^10.2.0",
-		"node-fetch": "2",
 		"valibot": "^0.29.0",
 		"winston": "^3.11.0"
 	},
