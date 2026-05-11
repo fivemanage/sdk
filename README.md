@@ -93,7 +93,7 @@ exports.fmsdk
 **Function Definition:**
 
 ```typescript
-takeServerImage(playerSource: string | number, metadata?: Record<string, unknown>, timeout?: number): Promise<{ url: string }>
+takeServerImage(playerSource: string | number, metadata?: Record<string, unknown>, timeout?: number, options?: { retentionExempt?: boolean, path?: string, filename?: string }): Promise<{ url: string }>
 ```
 
 **Lua Example:**
@@ -124,6 +124,17 @@ if success then
 else
     error('we are unable to capture screenshot to player.')
 end
+
+-- With upload options (retentionExempt, path, filename)
+local imageData = exports.fmsdk:takeServerImage(playerSource, {
+    name = "My image",
+}, nil, {
+    retentionExempt = true,
+    path = "screenshots/players",
+    filename = "player_screenshot.png",
+})
+
+print(imageData.url)
 ```
 
 **JavaScript Example:**
@@ -139,6 +150,17 @@ exports.fmsdk
     name: "My image",
     description: "This is my image",
     // or any other field you want
+  })
+  .then((imageData) => {
+    console.log(imageData.url);
+  });
+
+// With upload options (retentionExempt, path, filename)
+exports.fmsdk
+  .takeServerImage(playerSource, { name: "My image" }, null, {
+    retentionExempt: true,
+    path: "screenshots/players",
+    filename: "player_screenshot.png",
   })
   .then((imageData) => {
     console.log(imageData.url);

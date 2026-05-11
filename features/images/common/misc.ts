@@ -5,3 +5,9 @@ export type ImageUploadResponse = {
     url: string;
   };
 };
+
+export type ImageUploadOptions = {
+  retentionExempt?: boolean;
+  path?: string;
+  filename?: string;
+};
