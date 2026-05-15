@@ -27,6 +27,10 @@
 		"oxInventoryEvents": {
 			"enabled": false,
 			"dataset": "default"
+		},
+		"esxWorldEvents": {
+			"enabled": false,
+			"dataset": "default"
 		}
 	}
 }
