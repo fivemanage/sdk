@@ -10,7 +10,7 @@ import {
   union,
   unknown,
 } from "valibot";
-import type { ImageUploadResponse } from "~/images/common/misc";
+import type { ImageUploadOptions, ImageUploadResponse } from "~/images/common/misc";
 import { getErrorMessage } from "~/utils/common/misc";
 import { loadMediaConvar } from "~/utils/server/convars";
 import { registerRPCListener } from "~/utils/server/rpc";
@@ -33,6 +33,7 @@ const ImageUploadResponseSchema = object(
 async function uploadImage(
   data: string,
   metadata?: Record<string, unknown>,
+  options?: ImageUploadOptions,
 ): Promise<ImageUploadResponse> {
   try {
     const form = new FormData();
@@ -40,9 +41,18 @@ async function uploadImage(
     const base64String = data.split(",")[1] ?? "";
     const buffer = Buffer.from(base64String, "base64");
 
-    form.append("file", new Blob([new Uint8Array(buffer)]), "image.png");
+    form.append("file", new Blob([new Uint8Array(buffer)]), options?.filename ?? "image.png");
     if (metadata) {
       form.append("metadata", JSON.stringify(metadata));
+    }
+    if (options?.retentionExempt != null) {
+      form.append("retentionExempt", String(options.retentionExempt));
+    }
+    if (options?.path) {
+      form.append("path", options.path);
+    }
+    if (options?.filename) {
+      form.append("filename", options.filename);
     }
 
     const res = await fetch(apiUrl, {
@@ -68,9 +78,9 @@ async function uploadImage(
 async function requestClientScreenshot(
   playerSrc: string | number,
   metadata?: Record<string, unknown>,
+  options?: ImageUploadOptions,
   timeout?: number, // Optional timeout parameter
 ): Promise<ImageUploadResponse> {
-  // Validate playerSrc (must be a non-empty string or number)
   parse(
     union(
       [string([minLength(1)]), number()],
@@ -79,11 +89,9 @@ async function requestClientScreenshot(
     playerSrc,
   );
 
-  // Validate metadata (can be nullish or malformed record)
   parse(nullish(record(unknown(), "Image metadata is malformed")), metadata);
 
   return await new Promise((resolve, reject) => {
-    // Handle the optional timeout, if provided
     let timeoutId: NodeJS.Timeout | undefined;
 
     if (timeout) {
@@ -98,12 +106,12 @@ async function requestClientScreenshot(
       async (_: false | string, data: string) => {
         try {
           if (timeoutId) clearTimeout(timeoutId); // Clear timeout on success
-          const uploadResponse = await uploadImage(data, metadata);
+          const uploadResponse = await uploadImage(data, metadata, options);
           resolve(uploadResponse);
         } catch (error) {
           const errorMsg = getErrorMessage(error);
           console.error(errorMsg);
-          reject(new Error(errorMsg)); // Properly reject the promise
+          reject(new Error(errorMsg));
         }
       },
     );
@@ -111,11 +119,11 @@ async function requestClientScreenshot(
 }
 
 function registerRPCListeners() {
-  registerRPCListener<Record<string, unknown> | undefined, ImageUploadResponse>(
+  registerRPCListener<{ metadata?: Record<string, unknown>; options?: ImageUploadOptions }, ImageUploadResponse>(
     "fivemanage:takeImage",
     async (req, res) => {
       try {
-        const data = await requestClientScreenshot(req.source, req.data);
+        const data = await requestClientScreenshot(req.source, req.data?.metadata, req.data?.options);
 
         res({ success: true, data });
       } catch (error) {
@@ -131,11 +139,11 @@ function registerRPCListeners() {
 
 async function uploadFile(
   buffer: ArrayBuffer,
-  options: { metadata?: Record<string, unknown>; fileName?: string } = {},
+  options: { metadata?: Record<string, unknown>; fileName?: string; retentionExempt?: boolean; path?: string } = {},
 ) {
   try {
     const form = new FormData();
-    form.append("file", new Blob([new Uint8Array(buffer)]), "file.png");
+    form.append("file", new Blob([new Uint8Array(buffer)]), options.fileName ?? "file.png");
 
     if (options.metadata) {
       form.append("metadata", JSON.stringify(options.metadata));
@@ -143,6 +151,14 @@ async function uploadFile(
 
     if (options.fileName) {
       form.append("filename", options.fileName);
+    }
+
+    if (options.retentionExempt != null) {
+      form.append("retentionExempt", String(options.retentionExempt));
+    }
+
+    if (options.path) {
+      form.append("path", options.path);
     }
 
     const res = await fetch(apiUrl, {

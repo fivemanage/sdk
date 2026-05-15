@@ -1,13 +1,14 @@
-import type { ImageUploadResponse } from "~/images/common/misc";
+import type { ImageUploadOptions, ImageUploadResponse } from "~/images/common/misc";
 import { triggerServerRPC } from "~/utils/client/rpc";
 
 async function takeImage(
 	metadata?: Record<string, unknown>,
+	options?: ImageUploadOptions,
 ): Promise<ImageUploadResponse> {
 	const res = await triggerServerRPC<
-		Record<string, unknown> | undefined,
+		{ metadata?: Record<string, unknown>; options?: ImageUploadOptions },
 		ImageUploadResponse
-	>("fivemanage:takeImage", metadata);
+	>("fivemanage:takeImage", { metadata, options });
 
 	if (res.success === false) {
 		throw new Error(res.errorMsg);
