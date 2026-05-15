@@ -51,7 +51,7 @@ Examples are provided in both Lua and JavaScript. TypeScript developers can refe
 **Function Definition:**
 
 ```typescript
-takeImage(metadata?: Record<string, unknown>): Promise<{ url: string }>
+takeImage(metadata?: Record<string, unknown>, options?: { retentionExempt?: boolean, path?: string, filename?: string }): Promise<{ url: string }>
 ```
 
 **Lua Example:**
@@ -64,6 +64,15 @@ local imageData = exports.fmsdk:takeImage({
     name = "My image",
     description = "This is my image",
     -- or any other field you want
+})
+
+-- With metadata and upload options
+local imageData = exports.fmsdk:takeImage({
+    name = "My image",
+}, {
+    retentionExempt = true,
+    path = "screenshots/players",
+    filename = "player_screenshot.png",
 })
 
 print(imageData.url)
@@ -86,6 +95,17 @@ exports.fmsdk
   .then((imageData) => {
     console.log(imageData.url);
   });
+
+// With metadata and upload options
+exports.fmsdk
+  .takeImage({ name: "My image" }, {
+    retentionExempt: true,
+    path: "screenshots/players",
+    filename: "player_screenshot.png",
+  })
+  .then((imageData) => {
+    console.log(imageData.url);
+  });
 ```
 
 ### **Server Exports**
@@ -93,7 +113,7 @@ exports.fmsdk
 **Function Definition:**
 
 ```typescript
-takeServerImage(playerSource: string | number, metadata?: Record<string, unknown>, timeout?: number, options?: { retentionExempt?: boolean, path?: string, filename?: string }): Promise<{ url: string }>
+takeServerImage(playerSource: string | number, metadata?: Record<string, unknown>, options?: { retentionExempt?: boolean, path?: string, filename?: string }, timeout?: number): Promise<{ url: string }>
 ```
 
 **Lua Example:**
@@ -111,12 +131,21 @@ local imageData = exports.fmsdk:takeServerImage(playerSource, {
 print(imageData.url)
 
 
--- With metadata and timeout support.
+-- With upload options (retentionExempt, path, filename)
+local imageData = exports.fmsdk:takeServerImage(playerSource, {
+    name = "My image",
+}, {
+    retentionExempt = true,
+    path = "screenshots/players",
+    filename = "player_screenshot.png", -- file extension is not required and will be applied if not provided
+})
+
+-- With metadata, options and timeout support.
 local success, imageData = pcall(function()
     return exports.fmsdk:takeServerImage(source, {
         name = 'My image',
         description = 'This is my image',
-    }, 10000)
+    }, nil, 10000)
 end)
 
 if success then
@@ -124,15 +153,6 @@ if success then
 else
     error('we are unable to capture screenshot to player.')
 end
-
--- With upload options (retentionExempt, path, filename)
-local imageData = exports.fmsdk:takeServerImage(playerSource, {
-    name = "My image",
-}, nil, {
-    retentionExempt = true,
-    path = "screenshots/players",
-    filename = "player_screenshot.png",
-})
 
 print(imageData.url)
 ```
@@ -157,10 +177,10 @@ exports.fmsdk
 
 // With upload options (retentionExempt, path, filename)
 exports.fmsdk
-  .takeServerImage(playerSource, { name: "My image" }, null, {
+  .takeServerImage(playerSource, { name: "My image" }, {
     retentionExempt: true,
     path: "screenshots/players",
-    filename: "player_screenshot.png",
+    filename: "player_screenshot", // file extension is not required
   })
   .then((imageData) => {
     console.log(imageData.url);
