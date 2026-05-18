@@ -29,6 +29,7 @@ const ConfigSchema = object({
 		chatEvents: EventConfigSchema,
 		txAdminEvents: EventConfigSchema,
 		oxInventoryEvents: EventConfigSchema,
+		qbxCoreEvents: EventConfigSchema,
 	}),
 });
 

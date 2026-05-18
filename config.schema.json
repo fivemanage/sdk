@@ -132,6 +132,23 @@
 					}
 				},
 				"default": { "enabled": false, "dataset": "default" }
+			},
+			"qbxCoreEvents": {
+				"description": "qbx_core framework events configuration.",
+				"type": "object",
+				"properties": {
+					"enabled": {
+						"description": "Enable qbx_core events to be logged.",
+						"type": "boolean",
+						"default": false
+					},
+					"dataset": {
+						"description": "Dataset to use for qbx_core events.",
+						"type": "string",
+						"default": "default"
+					}
+				},
+				"default": { "enabled": false, "dataset": "default" }
 			}
 			},
 			"required": [
@@ -144,7 +161,8 @@
 				"playerEvents",
 				"chatEvents",
 				"txAdminEvents",
-				"oxInventoryEvents"
+				"oxInventoryEvents",
+				"qbxCoreEvents"
 			]
 		}
 	},

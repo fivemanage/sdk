@@ -27,6 +27,10 @@
 		"oxInventoryEvents": {
 			"enabled": false,
 			"dataset": "default"
+		},
+		"qbxCoreEvents": {
+			"enabled": false,
+			"dataset": "default"
 		}
 	}
 }
