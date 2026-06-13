@@ -1,4 +1,3 @@
-const path = require("path");
 const { context } = require("esbuild");
 const handleBuild = require("./handleBuild");
 const nodePaths = require("./nodePaths");
@@ -14,9 +13,6 @@ const buildConfig = {
 		platform: "node",
 		target: ["node16"],
 		format: "cjs",
-		alias: {
-			"node-fetch": path.resolve(__dirname, "node-fetch-shim.js"),
-		},
 	},
 	client: {
 		platform: "browser",

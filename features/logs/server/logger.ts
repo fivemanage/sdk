@@ -1,7 +1,6 @@
 import { createLogger, transports, format } from "winston";
 import { config } from "~/utils/common/config";
 import { LogColor, type _InternalOptions, type LogMetadata } from "~/logs/common/misc";
-import { FivemanageTransport } from "@fivemanage/winston";
 import { getFormattedPlayerIdentifiers } from "~/utils/server/identifiers";
 import {
 	minLength,
@@ -20,6 +19,7 @@ import './chat';
 import './txadmin'
 import './baseevents'
 import './third-party/ox-inventory'
+import { FivemanageTransport } from "./fivemanage-transport";
 
 const levels = config.logs.levels.reduce<Record<string, number>>(
 	(acc, curr, idx) => {
