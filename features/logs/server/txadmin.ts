@@ -51,7 +51,7 @@ type WhitelistPlayer = {
   adminName: string;
 };
 
-if (config.logs.txAdminEvents) {
+if (config.logs.txAdminEvents.enabled) {
   on("txAdmin:events:scheduledRestart", (data: ScheduledRestart) => {
     log(
       "info",
