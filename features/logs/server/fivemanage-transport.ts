@@ -4,12 +4,24 @@ type FivemanageTransportOptions = {
 	apiKey: string;
 	batchInterval?: number;
 	batchCount?: number;
+	maxBatchSize?: number;
 	shouldReprocessFailedBatches?: boolean;
 } & Transport.TransportStreamOptions;
 
 type LogBatch = Array<Record<string, unknown>>;
 
 const apiUrl = "https://api.fivemanage.com/api/v3/logs";
+const defaultMaxBatchSize = 100;
+
+class FivemanageLogBatchError extends Error {
+	readonly retryable: boolean;
+
+	constructor(message: string, retryable: boolean) {
+		super(message);
+		this.name = "FivemanageLogBatchError";
+		this.retryable = retryable;
+	}
+}
 
 function getErrorMessage(error: unknown) {
 	if (typeof error === "string") return error;
@@ -41,6 +53,7 @@ export class FivemanageTransport extends Transport {
 	private readonly apiKey: string;
 	private readonly batchInterval: number;
 	private readonly batchCount: number;
+	private readonly maxBatchSize: number;
 	private readonly shouldReprocessFailedBatches: boolean;
 	private readonly interval: ReturnType<typeof setInterval>;
 	private datasetBatches: Record<string, LogBatch> = {};
@@ -53,8 +66,9 @@ export class FivemanageTransport extends Transport {
 		this.apiKey = options.apiKey;
 		this.batchInterval = options.batchInterval ?? 5000;
 		this.batchCount = options.batchCount ?? 10;
+		this.maxBatchSize = Math.max(1, options.maxBatchSize ?? defaultMaxBatchSize);
 		this.shouldReprocessFailedBatches =
-			options.shouldReprocessFailedBatches ?? true;
+			options.shouldReprocessFailedBatches ?? false;
 		this.interval = this.startInterval();
 	}
 
@@ -89,9 +103,11 @@ export class FivemanageTransport extends Transport {
 		this.datasetBatches = {};
 
 		await Promise.all(
-			Object.entries(datasetBatches).map(([datasetId, datasetBatch]) =>
-				this.sendBatch(datasetId, datasetBatch),
-			),
+			Object.entries(datasetBatches).map(async ([datasetId, datasetBatch]) => {
+				for (let i = 0; i < datasetBatch.length; i += this.maxBatchSize) {
+					await this.sendBatch(datasetId, datasetBatch.slice(i, i + this.maxBatchSize));
+				}
+			}),
 		);
 	}
 
@@ -110,14 +126,18 @@ export class FivemanageTransport extends Transport {
 			});
 
 			if (response.ok === false) {
-				throw new Error(
+				throw new FivemanageLogBatchError(
 					`Status code: ${response.status}; Message: ${await getResponseErrorMessage(response)}`,
+					response.status === 429 || response.status >= 500,
 				);
 			}
 		} catch (error) {
 			console.error(`Failed to process log batch -> ${getErrorMessage(error)}`);
 
-			if (this.shouldReprocessFailedBatches) {
+			const retryable =
+				!(error instanceof FivemanageLogBatchError) || error.retryable;
+
+			if (this.shouldReprocessFailedBatches && retryable) {
 				this.datasetBatches[datasetId] = [
 					...datasetBatch,
 					...(this.datasetBatches[datasetId] ?? []),
