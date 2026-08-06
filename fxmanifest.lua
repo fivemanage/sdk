@@ -1,5 +1,7 @@
 fx_version "cerulean"
 
+version "3.2.0"
+
 game "gta5"
 
 node_version '22'
