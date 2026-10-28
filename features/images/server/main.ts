@@ -11,6 +11,7 @@ import {
   unknown,
 } from "valibot";
 import type { ImageUploadOptions, ImageUploadResponse } from "~/images/common/misc";
+import { captureClientImage, initializeCaptureProvider } from "~/images/server/capture";
 import { getErrorMessage } from "~/utils/common/misc";
 import { loadMediaConvar } from "~/utils/server/convars";
 import { registerRPCListener } from "~/utils/server/rpc";
@@ -91,31 +92,8 @@ async function requestClientScreenshot(
 
   parse(nullish(record(unknown(), "Image metadata is malformed")), metadata);
 
-  return await new Promise((resolve, reject) => {
-    let timeoutId: NodeJS.Timeout | undefined;
-
-    if (timeout) {
-      timeoutId = setTimeout(() => {
-        reject(new Error("Screenshot request timed out"));
-      }, timeout);
-    }
-
-    exports["screenshot-basic"]?.requestClientScreenshot?.(
-      playerSrc,
-      { encoding: "webp", quality: 0.8 },
-      async (_: false | string, data: string) => {
-        try {
-          if (timeoutId) clearTimeout(timeoutId); // Clear timeout on success
-          const uploadResponse = await uploadImage(data, metadata, options);
-          resolve(uploadResponse);
-        } catch (error) {
-          const errorMsg = getErrorMessage(error);
-          console.error(errorMsg);
-          reject(new Error(errorMsg));
-        }
-      },
-    );
-  });
+  const data = await captureClientImage(playerSrc, timeout);
+  return uploadImage(data, metadata, options);
 }
 
 function registerRPCListeners() {
@@ -190,6 +168,7 @@ function registerExports() {
 }
 
 export function startImageFeature() {
+  initializeCaptureProvider();
   registerRPCListeners();
   registerExports();
 }

@@ -12,7 +12,7 @@ This sdk simplifies interaction with our public API for FiveM server developers,
 
 ## **Resource Dependencies**
 
-**[screenshot-basic](https://github.com/citizenfx/screenshot-basic)**: A required resource to enable the sdk to capture client screen images.
+**[screencapture](https://github.com/itschip/screencapture)**: The preferred resource for capturing client screen images. Existing installations can continue using **[screenshot-basic](https://github.com/citizenfx/screenshot-basic)** as a fallback. Only one capture resource is required; if both are started, the SDK uses `screencapture`. The SDK selects and caches the provider at startup. Restart the SDK after changing capture providers.
 
 ## **Installation & Setup**
 
@@ -20,14 +20,14 @@ This sdk simplifies interaction with our public API for FiveM server developers,
 
 2. **Extract to Resources:** Unzip and place the `fmsdk` folder into your FiveM server's `resources` folder.
 
-3. **Setup Dependencies:** If not already present, download and set up `screenshot-basic` by following its **[installation instructions](https://github.com/citizenfx/screenshot-basic?tab=readme-ov-file#usage)**. This resource is essential for capturing client screen images.
+3. **Setup Dependencies:** Download and set up **[screencapture](https://github.com/itschip/screencapture)** for capturing client screen images. Existing `screenshot-basic` installations are also supported.
 
 4. **Configure Server CFG:**
 
-   - Make sure `screenshot-basic` is started before `fmsdk` in your `server.cfg`. Add the following lines:
+   - Make sure `screencapture` is started before `fmsdk` in your `server.cfg`. Add the following lines (or keep `ensure screenshot-basic` for an existing installation):
      ```
-     ensure screenshot-basic  # Only add this line if `screenshot-basic` is not already ensured in your configuration.
-     ensure fmsdk    # The SDK must be started after the `screenshot-basic` resource.
+     ensure screencapture
+     ensure fmsdk
      ```
    - Add the following ConVars to your `server.cfg` for API authentication depending on what you're using the sdk for. Both are not required at the same time.
      ```
@@ -43,6 +43,8 @@ This sdk simplifies interaction with our public API for FiveM server developers,
 ## **Working with Images**
 
 This section provides examples of how to use the `takeImage` and `takeServerImage` exports on the client and server sides, respectively.
+
+Both exports keep their existing arguments and response format when using `screencapture`, including metadata, upload options, and the optional server capture timeout. Uploads and API authentication are handled on the server. If neither capture resource is started when the SDK starts, it logs an error and capture requests fail until a provider is started and the SDK is restarted.
 
 Examples are provided in both Lua and JavaScript. TypeScript developers can refer to the type annotations provided in the function definitions for guidance on the expected argument and return types.
 
