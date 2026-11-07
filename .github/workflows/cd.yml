@@ -17,12 +17,11 @@ jobs:
       pull-requests: read
 
     steps:
-      - name: Get tag
-        run: echo ::set-output name=VERSION_TAG::${GITHUB_REF/refs\/tags\//}
-        id: get_tag
-
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.repository.default_branch }}
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -53,6 +52,24 @@ jobs:
       - name: Build project
         run: pnpm run build
 
+      - name: Bump manifest version
+        run: node .github/actions/bump-manifest-version.js
+        env:
+          TGT_RELEASE_VERSION: ${{ github.ref_name }}
+
+      - name: Push manifest change
+        uses: EndBug/add-and-commit@v11.1.1
+        with:
+          add: fxmanifest.lua
+          push: true
+          author_name: Manifest Bumper
+          message: 'chore: bump manifest version to ${{ github.ref_name }}'
+
+      - name: Update tag ref
+        uses: EndBug/latest-tag@v1.6.3
+        with:
+          ref: ${{ github.ref_name }}
+
       - name: Bundle built files
         run: |
           mkdir -p ./temp/fmsdk
@@ -64,7 +81,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: Fivemanage SDK | ${{ steps.get_tag.outputs.VERSION_TAG }}
+          name: Fivemanage SDK | ${{ github.ref_name }}
           prerelease: false
           files: fmsdk.zip
 
