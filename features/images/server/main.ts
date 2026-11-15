@@ -42,7 +42,7 @@ async function uploadImage(
     const base64String = data.split(",")[1] ?? "";
     const buffer = Buffer.from(base64String, "base64");
 
-    form.append("file", new Blob([new Uint8Array(buffer)]), options?.filename ?? "image.png");
+    form.append("file", new Blob([new Uint8Array(buffer)]), options?.fileName ?? options?.filename ?? "image.png");
     if (metadata) {
       form.append("metadata", JSON.stringify(metadata));
     }
@@ -52,8 +52,9 @@ async function uploadImage(
     if (options?.path) {
       form.append("path", options.path);
     }
-    if (options?.filename) {
-      form.append("filename", options.filename);
+    const fileName = options?.fileName ?? options?.filename;
+    if (fileName) {
+      form.append("filename", fileName);
     }
 
     const res = await fetch(apiUrl, {
@@ -117,18 +118,19 @@ function registerRPCListeners() {
 
 async function uploadFile(
   buffer: ArrayBuffer,
-  options: { metadata?: Record<string, unknown>; fileName?: string; retentionExempt?: boolean; path?: string } = {},
+  options: ImageUploadOptions & { metadata?: Record<string, unknown> } = {},
 ) {
   try {
     const form = new FormData();
-    form.append("file", new Blob([new Uint8Array(buffer)]), options.fileName ?? "file.png");
+    const fileName = options.fileName ?? options.filename;
+    form.append("file", new Blob([new Uint8Array(buffer)]), fileName ?? "file.png");
 
     if (options.metadata) {
       form.append("metadata", JSON.stringify(options.metadata));
     }
 
-    if (options.fileName) {
-      form.append("filename", options.fileName);
+    if (fileName) {
+      form.append("filename", fileName);
     }
 
     if (options.retentionExempt != null) {
